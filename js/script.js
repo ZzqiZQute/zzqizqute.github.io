@@ -138,6 +138,10 @@
     $('#content-mask')[0].style.opacity="0"
     setTimeout(()=>{
       document.getElementById('wrap').removeChild($('#content-mask')[0])
+      NProgress.done()
     },500)
+
   };
+  NProgress.start()
+
 })(jQuery);
