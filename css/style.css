@@ -407,10 +407,10 @@ body {
 .nav-icon {
   font-family: FontAwesome;
   text-align: center;
-  font-size: 14px;
-  width: 14px;
-  height: 14px;
-  padding: 20px 15px;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  padding: 20px 25px;
   position: relative;
   cursor: pointer;
 }
