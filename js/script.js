@@ -134,10 +134,10 @@
 
     $container.removeClass('mobile-nav-on');
   });
-  $(document).ready(function(){
+  window.onload=function(){
     $('#content-mask')[0].style.opacity="0"
     setTimeout(()=>{
       document.getElementById('wrap').removeChild($('#content-mask')[0])
     },500)
-  })
+  };
 })(jQuery);
