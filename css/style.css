@@ -177,7 +177,7 @@ body {
   background: #eee;
 }
 .mobile-nav-on #wrap {
-  left: 280px;
+  left: 200px;
 }
 @media screen and (min-width: 768px) {
   #main {
@@ -1272,10 +1272,13 @@ pre .javascript .function {
     position: absolute;
     top: 0;
     left: 0;
-    width: 280px;
+    width: 200px;
     height: 100%;
-    background: #191919;
-    border-right: 1px solid #fff;
+    background: #eee;
+    border-right: 1px solid #bbb;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
   }
 }
 @media screen and (max-width: 479px) {
@@ -1287,7 +1290,7 @@ pre .javascript .function {
     font-weight: bold;
   }
   .mobile-nav-link:hover {
-    color: #fff;
+    color: #000;
   }
 }
 @media screen and (min-width: 768px) {
