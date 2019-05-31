@@ -134,14 +134,15 @@
 
     $container.removeClass('mobile-nav-on');
   });
-  window.onload=function(){
-    $('#content-mask')[0].style.opacity="0"
-    setTimeout(()=>{
-      document.getElementById('wrap').removeChild($('#content-mask')[0])
-      NProgress.done()
-    },500)
+  // $('#banner').onload=function(){
+  //   $('#content-mask')[0].style.opacity="0"
+  //   setTimeout(()=>{
+  //     document.getElementById('wrap').removeChild($('#content-mask')[0])
+  //     NProgress.done()
+  //   },500)
 
-  };
+  // };
+  $().ready(()=>NProgress.done())
   NProgress.start()
 
 })(jQuery);
