@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="我带你们打">
 <meta property="og:description" content="参考链接：https://doc.babylonjs.com/babylon101/discover_basic_elements 我们可以通过Babylon中的MeshBuilder来创建基本元素，其通用写法为 1const mesh = BABYLON.MeshBuilder.Create&amp;lt;Mesh&amp;gt;(name, &amp;#123;param1 : val1, param2:">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-06-01T14:32:44.817Z">
+<meta property="og:updated_time" content="2019-06-02T02:46:24.545Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Babylon.js-3 基本元素">
 <meta name="twitter:description" content="参考链接：https://doc.babylonjs.com/babylon101/discover_basic_elements 我们可以通过Babylon中的MeshBuilder来创建基本元素，其通用写法为 1const mesh = BABYLON.MeshBuilder.Create&amp;lt;Mesh&amp;gt;(name, &amp;#123;param1 : val1, param2:">
@@ -104,13 +104,13 @@
 <li>DashedLines （虚线）</li>
 <li>Decal （贴花）</li>
 <li>Disc （圆盘）</li>
-<li>Ground （地面）</li>
+<li><a href="#babylon-3-ground">Ground （地面）</a></li>
 <li>GroundFromHeightMap （在高度图上的地面）</li>
 <li>IcoSphere （多边形近似球体）</li>
 <li>Lathe （车床）</li>
 <li>LineSystem （线系统）</li>
 <li>Lines （线）</li>
-<li>Plane （平面）</li>
+<li><a href="#babylon-3-plane">Plane （平面）</a></li>
 <li>Polygon （多边形）</li>
 <li>Polyhedron （多面体）</li>
 <li>Ribbon （丝带）</li>
@@ -153,20 +153,20 @@
 
 <p>效果如下：</p>
 <div style="display:flex;justify-content:center;margin-top:20px;margin-bottom:20px">
-    <canvas id="renderCanvas-3-1" touch-action="none" style="width:400px;height:400px">
+    <canvas id="renderCanvas-3-box" touch-action="none" style="width:400px;height:400px">
     </canvas>
 </div>
 <script>
-    const canvas = document.getElementById('renderCanvas-3-1')
-    const engine = new BABYLON.Engine(canvas,true)
-    const scene = new BABYLON.Scene(engine)
+    const canvasBox = document.getElementById('renderCanvas-3-box')
+    const engineBox = new BABYLON.Engine(canvasBox,true)
+    const sceneBox = new BABYLON.Scene(engineBox)
     // 添加照相机
-    const camera = new BABYLON.ArcRotateCamera("Camera",-Math.PI/4,Math.PI/3, 500, new BABYLON.Vector3(0,0,0), scene)
+    const cameraBox = new BABYLON.ArcRotateCamera("CameraBox",-Math.PI/4,Math.PI/3, 500, new BABYLON.Vector3(0,0,0), sceneBox)
     // 设置照相机可以控制
-    camera.attachControl(canvas, true)
+    cameraBox.attachControl(canvasBox, true)
     // 添加光源
-    const light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene)
-    const light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 1, -1), scene)
+    const light1Box = new BABYLON.HemisphericLight("light1box", new BABYLON.Vector3(1, 1, 0), sceneBox)
+    const light2Box = new BABYLON.PointLight("light2box", new BABYLON.Vector3(0, 1, -1), sceneBox)
     // TODO 修改代码为假设效果
     // 设置变化方向
     let x=true,y=true,z=true
@@ -194,19 +194,19 @@
         }
         // 注意！ 此处使用移除场景中的box再新添加box来实现视觉上box大小的变化，如果改变原始box，需要修改其顶点坐标来实现。设置updatable为true，之后修改mesh的顶点坐标。
         if(box!==null){
-            scene.removeMesh(box)
+            sceneBox.removeMesh(box)
             //注意释放资源
             box.dispose()
         }
-        box=BABYLON.MeshBuilder.CreateBox("box",{width,height,depth,faceColors:[new BABYLON.Color4(1,1,1),new BABYLON.Color4(0,1,0),new BABYLON.Color4(1,1,1),new BABYLON.Color4(1,1,1),new BABYLON.Color4(1,0,0),new BABYLON.Color4(1,1,1)]},scene)
+        box=BABYLON.MeshBuilder.CreateBox("box",{width,height,depth,faceColors:[new BABYLON.Color4(1,1,1),new BABYLON.Color4(0,1,0),new BABYLON.Color4(1,1,1),new BABYLON.Color4(1,1,1),new BABYLON.Color4(1,0,0),new BABYLON.Color4(1,1,1)]},sceneBox)
         requestAnimationFrame(anime)
     }
     anime()
-    engine.runRenderLoop(function(){scene.render()})
+    engineBox.runRenderLoop(function(){sceneBox.render()})
 </script>
 <div id="babylon-3-sphere"></div>
 
-<h3 id="球-（Sphere）"><a href="#球-（Sphere）" class="headerlink" title="球 （Sphere）"></a>球 （Sphere）</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sphere = BABYLON.MeshBuilder.CreateSphere(<span class="string">"box"</span>, parameters, scene);</span><br></pre></td></tr></table></figure>
+<h3 id="球-（Sphere）"><a href="#球-（Sphere）" class="headerlink" title="球 （Sphere）"></a>球 （Sphere）</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sphere = BABYLON.MeshBuilder.CreateSphere(<span class="string">"sphere"</span>, parameters, scene);</span><br></pre></td></tr></table></figure>
 
 <p>其中<code>parameter</code>是球的可选参数，如下:</p>
 <ul>
@@ -227,37 +227,115 @@
 <li><code>segments</code> 指球的分段数，值越大分段越多越精密，但越消耗内存。</li>
 </ul>
 <p>假设一个球的半径为2，分段数为8，使用以下代码进行实验：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> canvas2 = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-3-2'</span>)</span><br><span class="line"><span class="keyword">const</span> engine2 = <span class="keyword">new</span> BABYLON.Engine(canvas2,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> scene2 = <span class="keyword">new</span> BABYLON.Scene(engine2)</span><br><span class="line"><span class="comment">// 添加照相机</span></span><br><span class="line"><span class="keyword">const</span> camera2 = <span class="keyword">new</span> BABYLON.ArcRotateCamera(<span class="string">"Camera2"</span>,-<span class="built_in">Math</span>.PI/<span class="number">4</span>,<span class="built_in">Math</span>.PI/<span class="number">3</span>, <span class="number">5</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>), scene2)</span><br><span class="line"><span class="comment">// 设置照相机可以控制</span></span><br><span class="line">camera2.attachControl(canvas2, <span class="literal">true</span>)</span><br><span class="line"><span class="comment">// 添加光源</span></span><br><span class="line"><span class="keyword">const</span> light3 = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">"light3"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>), scene2)</span><br><span class="line"><span class="keyword">const</span> light4 = <span class="keyword">new</span> BABYLON.PointLight(<span class="string">"light4"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">-1</span>), scene2)</span><br><span class="line"><span class="comment">// TODO 修改代码为假设效果</span></span><br><span class="line"><span class="keyword">const</span> sphere=BABYLON.MeshBuilder.CreateSphere(<span class="string">"sphere"</span>,&#123;<span class="attr">diameter</span>:<span class="number">2</span>&#125;,scene2)</span><br><span class="line">engine2.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;scene2.render()&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> canvasSphere = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-3-sphere'</span>)</span><br><span class="line"><span class="keyword">const</span> engineSphere = <span class="keyword">new</span> BABYLON.Engine(canvasSphere,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> sceneSphere = <span class="keyword">new</span> BABYLON.Scene(engineSphere)</span><br><span class="line"><span class="comment">// 添加照相机</span></span><br><span class="line"><span class="keyword">const</span> cameraSphere = <span class="keyword">new</span> BABYLON.ArcRotateCamera(<span class="string">"CameraSphere"</span>,-<span class="built_in">Math</span>.PI/<span class="number">4</span>,<span class="built_in">Math</span>.PI/<span class="number">3</span>, <span class="number">5</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>), sceneSphere)</span><br><span class="line"><span class="comment">// 设置照相机可以控制</span></span><br><span class="line">cameraSphere.attachControl(canvasSphere, <span class="literal">true</span>)</span><br><span class="line"><span class="comment">// 添加光源</span></span><br><span class="line"><span class="keyword">const</span> lightSphere1 = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">"lightSphere1"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>), sceneSphere)</span><br><span class="line"><span class="keyword">const</span> lightSphere2 = <span class="keyword">new</span> BABYLON.PointLight(<span class="string">"lightSphere2"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">-1</span>), sceneSphere)</span><br><span class="line"><span class="comment">// TODO 修改代码为假设效果</span></span><br><span class="line"><span class="keyword">const</span> sphere=BABYLON.MeshBuilder.CreateSphere(<span class="string">"sphere"</span>,&#123;<span class="attr">diameter</span>:<span class="number">2</span>,<span class="attr">segments</span>:<span class="number">8</span>&#125;,sceneSphere)</span><br><span class="line">engineSphere.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;sceneSphere.render()&#125;)</span><br></pre></td></tr></table></figure>
 
 <p>效果如下：</p>
 <div style="display:flex;justify-content:center;margin-top:20px;margin-bottom:20px">
-    <canvas id="renderCanvas-3-2" touch-action="none" style="width:400px;height:400px">
+    <canvas id="renderCanvas-3-sphere" touch-action="none" style="width:400px;height:400px">
     </canvas>
 </div>
 <script>
-    const canvas2 = document.getElementById('renderCanvas-3-2')
-    const engine2 = new BABYLON.Engine(canvas2,true)
-    const scene2 = new BABYLON.Scene(engine2)
+    const canvasSphere = document.getElementById('renderCanvas-3-sphere')
+    const engineSphere = new BABYLON.Engine(canvasSphere,true)
+    const sceneSphere = new BABYLON.Scene(engineSphere)
     // 添加照相机
-    const camera2 = new BABYLON.ArcRotateCamera("Camera2",-Math.PI/4,Math.PI/3, 5, new BABYLON.Vector3(0,0,0), scene2)
+    const cameraSphere = new BABYLON.ArcRotateCamera("CameraSphere",-Math.PI/4,Math.PI/3, 5, new BABYLON.Vector3(0,0,0), sceneSphere)
     // 设置照相机可以控制
-    camera2.attachControl(canvas2, true)
+    cameraSphere.attachControl(canvasSphere, true)
     // 添加光源
-    const light3 = new BABYLON.HemisphericLight("light3", new BABYLON.Vector3(1, 1, 0), scene2)
-    const light4 = new BABYLON.PointLight("light4", new BABYLON.Vector3(0, 1, -1), scene2)
+    const lightSphere1 = new BABYLON.HemisphericLight("lightSphere1", new BABYLON.Vector3(1, 1, 0), sceneSphere)
+    const lightSphere2 = new BABYLON.PointLight("lightSphere2", new BABYLON.Vector3(0, 1, -1), sceneSphere)
     // TODO 修改代码为假设效果
-    const sphere=BABYLON.MeshBuilder.CreateSphere("sphere",{diameter:2,segments:8},scene2)
-    engine2.runRenderLoop(function(){scene2.render()})
+    const sphere=BABYLON.MeshBuilder.CreateSphere("sphere",{diameter:2,segments:8},sceneSphere)
+    engineSphere.runRenderLoop(function(){sceneSphere.render()})
 </script>
 
+<div id="babylon-3-plane">
 
+<h3 id="平面-（Plane）"><a href="#平面-（Plane）" class="headerlink" title="平面 （Plane）"></a>平面 （Plane）</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> plane = BABYLON.MeshBuilder.CreatePlane(<span class="string">"plane"</span>, parameters, scene);</span><br></pre></td></tr></table></figure>
 
+<p>其中<code>parameter</code>是平面的可选参数，如下:</p>
+<ul>
+<li>backUVs?: Vector4</li>
+<li>frontUVs?: Vector4</li>
+<li>height?: number 高度</li>
+<li>sideOrientation?: number</li>
+<li>size?: number 尺寸</li>
+<li>sourcePlane?: Plane</li>
+<li>updatable?: boolean</li>
+<li>width?: number 宽度</li>
+</ul>
+<ul>
+<li><code>size</code> 指平面的尺寸，当<code>width</code> <code>height</code> 未设置时都使用<code>size</code>值代替。</li>
+<li>可以理解为一个盒子的前面</li>
+</ul>
+<p>我们创建一个宽为2，高为1的平面，使用以下代码实现：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> canvasPlane = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-3-plane'</span>)</span><br><span class="line"><span class="keyword">const</span> enginePlane = <span class="keyword">new</span> BABYLON.Engine(canvasPlane,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> scenePlane = <span class="keyword">new</span> BABYLON.Scene(enginePlane)</span><br><span class="line"><span class="comment">// 添加照相机</span></span><br><span class="line"><span class="keyword">const</span> cameraPlane = <span class="keyword">new</span> BABYLON.ArcRotateCamera(<span class="string">"CameraPlane"</span>,-<span class="built_in">Math</span>.PI/<span class="number">4</span>,<span class="built_in">Math</span>.PI/<span class="number">3</span>, <span class="number">5</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>), scenePlane)</span><br><span class="line"><span class="comment">// 设置照相机可以控制</span></span><br><span class="line">cameraPlane.attachControl(canvasPlane, <span class="literal">true</span>)</span><br><span class="line"><span class="comment">// 添加光源</span></span><br><span class="line"><span class="keyword">const</span> lightPlane1 = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">"lightPlane1"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>), scenePlane)</span><br><span class="line"><span class="keyword">const</span> lightPlane2 = <span class="keyword">new</span> BABYLON.PointLight(<span class="string">"lightPlane2"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">-1</span>), scenePlane)</span><br><span class="line"><span class="comment">// TODO 修改代码为假设效果</span></span><br><span class="line"><span class="keyword">const</span> plane=BABYLON.MeshBuilder.CreatePlane(<span class="string">"plane"</span>,&#123;<span class="attr">width</span>:<span class="number">2</span>,<span class="attr">height</span>:<span class="number">1</span>&#125;,scenePlane)</span><br><span class="line">enginePlane.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;scenePlane.render()&#125;)</span><br></pre></td></tr></table></figure>
 
+<p>效果如下：</p>
+<div style="display:flex;justify-content:center;margin-top:20px;margin-bottom:20px">
+    <canvas id="renderCanvas-3-plane" touch-action="none" style="width:400px;height:400px">
+    </canvas>
+</div>
+<script>
+    const canvasPlane = document.getElementById('renderCanvas-3-plane')
+    const enginePlane = new BABYLON.Engine(canvasPlane,true)
+    const scenePlane = new BABYLON.Scene(enginePlane)
+    // 添加照相机
+    const cameraPlane = new BABYLON.ArcRotateCamera("CameraPlane",-Math.PI/4,Math.PI/3, 5, new BABYLON.Vector3(0,0,0), scenePlane)
+    // 设置照相机可以控制
+    cameraPlane.attachControl(canvasPlane, true)
+    // 添加光源
+    const lightPlane1 = new BABYLON.HemisphericLight("lightPlane1", new BABYLON.Vector3(1, 1, 0), scenePlane)
+    const lightPlane2 = new BABYLON.PointLight("lightPlane2", new BABYLON.Vector3(0, 1, -1), scenePlane)
+    // TODO 修改代码为假设效果
+    const plane=BABYLON.MeshBuilder.CreatePlane("plane",{width:2,height:1},scenePlane)
+    enginePlane.runRenderLoop(function(){scenePlane.render()})
+</script>
 
+<div id="babylon-3-ground"></div>
+
+<h3 id="Ground-（地面）"><a href="#Ground-（地面）" class="headerlink" title="Ground （地面）"></a>Ground （地面）</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ground = BABYLON.MeshBuilder.CreateGround(<span class="string">"ground"</span>, parameters, scene);</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>parameter</code>是地面的可选参数，如下:</p>
+<ul>
+<li>height?: number 高 z轴</li>
+<li>subdivisions?: number 边的细分数</li>
+<li>subdivisionsX?: number x轴边细分数</li>
+<li>subdivisionsY?: number y轴边细分数</li>
+<li>updatable?: boolean</li>
+<li>width?: number 宽 x轴</li>
+</ul>
+<ul>
+<li><code>Ground</code>是创建在x轴和z轴（y=0）的地面</li>
+<li><code>subdivisions</code>是地面边的细分数，用于构建高度图。默认<code>subdivisionsX</code> <code>subdivisionsY</code>与<code>subdivisions</code>相同<br>我们创建一个宽为2，高为1的地面，使用以下代码实现：<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> canvasGround = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-3-ground'</span>)</span><br><span class="line"><span class="keyword">const</span> engineGround = <span class="keyword">new</span> BABYLON.Engine(canvasGround,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> sceneGround = <span class="keyword">new</span> BABYLON.Scene(engineGround)</span><br><span class="line"><span class="comment">// 添加照相机</span></span><br><span class="line"><span class="keyword">const</span> cameraGround = <span class="keyword">new</span> BABYLON.ArcRotateCamera(<span class="string">"CameraGround"</span>,<span class="built_in">Math</span>.PI/<span class="number">2</span>,<span class="built_in">Math</span>.PI/<span class="number">4</span>, <span class="number">4</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>), sceneGround)</span><br><span class="line"><span class="comment">// 设置照相机可以控制</span></span><br><span class="line">cameraGround.attachControl(canvasGround, <span class="literal">true</span>)</span><br><span class="line"><span class="comment">// 添加光源</span></span><br><span class="line"><span class="keyword">const</span> lightGround1 = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">"lightGround1"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>), sceneGround)</span><br><span class="line"><span class="keyword">const</span> lightGround2 = <span class="keyword">new</span> BABYLON.PointLight(<span class="string">"lightGround2"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">-1</span>), sceneGround)</span><br><span class="line"><span class="comment">// TODO 修改代码为假设效果</span></span><br><span class="line"><span class="keyword">const</span> ground=BABYLON.MeshBuilder.CreateGround(<span class="string">"ground"</span>,&#123;<span class="attr">width</span>:<span class="number">2</span>,<span class="attr">height</span>:<span class="number">1</span>&#125;,sceneGround)</span><br><span class="line">engineGround.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;sceneGround.render()&#125;)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>效果如下：</p>
+<div style="display:flex;justify-content:center;margin-top:20px;margin-bottom:20px">
+    <canvas id="renderCanvas-3-ground" touch-action="none" style="width:400px;height:400px">
+    </canvas>
+</div>
+<script>
+    const canvasGround = document.getElementById('renderCanvas-3-ground')
+    const engineGround = new BABYLON.Engine(canvasGround,true)
+    const sceneGround = new BABYLON.Scene(engineGround)
+    // 添加照相机
+    const cameraGround = new BABYLON.ArcRotateCamera("CameraGround",Math.PI/2,Math.PI/4, 4, new BABYLON.Vector3(0,0,0), sceneGround)
+    // 设置照相机可以控制
+    cameraGround.attachControl(canvasGround, true)
+    // 添加光源
+    const lightGround1 = new BABYLON.HemisphericLight("lightGround1", new BABYLON.Vector3(1, 1, 0), sceneGround)
+    const lightGround2 = new BABYLON.PointLight("lightGround2", new BABYLON.Vector3(0, 1, -1), sceneGround)
+    // TODO 修改代码为假设效果
+    const ground=BABYLON.MeshBuilder.CreateGround("ground",{width:2,height:1},sceneGround)
+    engineGround.runRenderLoop(function(){sceneGround.render()})
+</script></div>
       
     </div>
     <!-- <footer class="article-footer">
-      <a data-url="https://github.com/ZzqiZQute/2019/06/01/Babylon-js-3-基本元素/" data-id="cjwdm9mmj0007ggutgoqzq9ax" class="article-share-link">Share</a>
+      <a data-url="https://github.com/ZzqiZQute/2019/06/01/Babylon-js-3-基本元素/" data-id="cjwechx260007y0uth048c7fz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BabylonJS/">BabylonJS</a></li></ul>
