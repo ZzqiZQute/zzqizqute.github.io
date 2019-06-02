@@ -159,7 +159,7 @@
   window.addEventListener('load',()=>{
     var width=document.body.getBoundingClientRect().width
     if(width<600)
-      cameraBanner.radius=32
+      cameraBanner.radius=57
   })
   window.addEventListener('resize',()=>{
     engineBanner.resize()
