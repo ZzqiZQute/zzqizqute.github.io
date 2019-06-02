@@ -147,6 +147,7 @@
   var canvasBanner=$("#logo3d-canvas")[0]
   var engineBanner=new BABYLON.Engine(canvasBanner,true)
   var sceneBanner=new BABYLON.Scene(engineBanner);
+  sceneBanner.clearColor=new BABYLON.Color3(8/15,8/15,8/15)
   var cameraBanner=new BABYLON.ArcRotateCamera("cameraBanner",-Math.PI/2,Math.PI/2,40,new BABYLON.Vector3(0,0,0),sceneBanner)
   cameraBanner.attachControl(canvasBanner,false)
   var light1Banner=new BABYLON.HemisphericLight("light1Banner",new BABYLON.Vector3(0,-1,-1),sceneBanner)
