@@ -157,6 +157,9 @@
   planeBanner.material=materialBanner
   engineBanner.runRenderLoop(function(){sceneBanner.render()})
   window.addEventListener('resize',()=>{
+    var width=document.body.getBoundingClientRect().width
+    if(width<600)
+      cameraBanner.radius=32
     engineBanner.resize()
   })
   
