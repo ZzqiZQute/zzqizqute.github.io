@@ -142,7 +142,36 @@
   //   },500)
 
   // };
-  $().ready(()=>NProgress.done())
+  $(document).ready(()=>NProgress.done())
   NProgress.start()
+  var canvasBanner=$("#logo3d-canvas")[0]
+  var engineBanner=new BABYLON.Engine(canvasBanner,true)
+  var sceneBanner=new BABYLON.Scene(engineBanner);
+  var cameraBanner=new BABYLON.ArcRotateCamera("cameraBanner",-Math.PI/2,Math.PI/2,40,new BABYLON.Vector3(0,0,0),sceneBanner)
+  cameraBanner.attachControl(canvasBanner,false)
+  var light1Banner=new BABYLON.HemisphericLight("light1Banner",new BABYLON.Vector3(0,-1,-1),sceneBanner)
+  var light2Banner=new BABYLON.HemisphericLight("light2Banner",new BABYLON.Vector3(0,-1,1),sceneBanner)
+  var planeBanner=BABYLON.MeshBuilder.CreatePlane("planeBanner",{width:160,height:48,sideOrientation:BABYLON.Mesh.DOUBLESIDE},sceneBanner)
+  var materialBanner=new BABYLON.StandardMaterial("materialBanner",sceneBanner)
+  materialBanner.diffuseTexture=new BABYLON.Texture("https://zzqizqute.github.io/css/images/banner.jpg",sceneBanner)
+  planeBanner.material=materialBanner
+  engineBanner.runRenderLoop(function(){sceneBanner.render()})
+  window.addEventListener('resize',()=>{
+    engineBanner.resize()
+  })
+  
+  var firefox = navigator.userAgent.indexOf('Firefox') !== -1;
+  firefox ? canvasBanner.addEventListener('DOMMouseScroll', MouseWheel, false) :
+     (canvasBanner.onmousewheel = MouseWheel);
+  
+  function MouseWheel(e) {
+    e = e || window.event;
+    if (e.stopPropagation) e.stopPropagation();
+    else e.cancelBubble = true;
+      
+    if (e.preventDefault) e.preventDefault();
+    else e.returnValue = false;
+  
+  }
 
 })(jQuery);
