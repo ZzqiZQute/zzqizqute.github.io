@@ -156,10 +156,12 @@
   materialBanner.diffuseTexture=new BABYLON.Texture("https://zzqizqute.github.io/css/images/banner.jpg",sceneBanner)
   planeBanner.material=materialBanner
   engineBanner.runRenderLoop(function(){sceneBanner.render()})
-  window.addEventListener('resize',()=>{
+  window.addEventListener('load',()=>{
     var width=document.body.getBoundingClientRect().width
     if(width<600)
       cameraBanner.radius=32
+  })
+  window.addEventListener('resize',()=>{
     engineBanner.resize()
   })
   
