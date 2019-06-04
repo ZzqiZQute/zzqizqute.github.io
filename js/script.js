@@ -129,7 +129,7 @@
     stopMobileNavAnim();
   });
 
-  $('#wrap').on('click', function(){
+  $('wrap').on('click', function(){
     if (isMobileNavAnim || !$container.hasClass('mobile-nav-on')) return;
 
     $container.removeClass('mobile-nav-on');
@@ -150,8 +150,8 @@
   sceneBanner.clearColor=new BABYLON.Color3(8/15,8/15,8/15)
   var cameraBanner=new BABYLON.ArcRotateCamera("cameraBanner",-Math.PI/2,Math.PI/2,40,new BABYLON.Vector3(0,0,0),sceneBanner)
   cameraBanner.attachControl(canvasBanner,false)
-  var light1Banner=new BABYLON.HemisphericLight("light1Banner",new BABYLON.Vector3(0,-1,-1),sceneBanner)
-  var light2Banner=new BABYLON.HemisphericLight("light2Banner",new BABYLON.Vector3(0,-1,1),sceneBanner)
+  var light1Banner=new BABYLON.HemisphericLight("light1Banner",new BABYLON.Vector3(0,2,-1),sceneBanner)
+  var light2Banner=new BABYLON.HemisphericLight("light2Banner",new BABYLON.Vector3(0,2,1),sceneBanner)
   var planeBanner=BABYLON.MeshBuilder.CreatePlane("planeBanner",{width:160,height:48,sideOrientation:BABYLON.Mesh.DOUBLESIDE},sceneBanner)
   var materialBanner=new BABYLON.StandardMaterial("materialBanner",sceneBanner)
   materialBanner.diffuseTexture=new BABYLON.Texture("https://zzqizqute.github.io/css/images/banner.jpg",sceneBanner)
