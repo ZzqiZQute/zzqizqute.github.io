@@ -143,7 +143,6 @@
 
   // };
   $(document).ready(()=>NProgress.done())
-  NProgress.start()
   var canvasBanner=$("#logo3d-canvas")[0]
   var engineBanner=new BABYLON.Engine(canvasBanner,true)
   var sceneBanner=new BABYLON.Scene(engineBanner);
