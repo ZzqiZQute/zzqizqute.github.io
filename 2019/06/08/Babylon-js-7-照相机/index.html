@@ -11,17 +11,17 @@
 <meta name="keywords" content="BabylonJS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Babylon.js-7 照相机">
-<meta property="og:url" content="https://github.com/ZzqiZQute/2019/06/05/Babylon-js-7-照相机/index.html">
+<meta property="og:url" content="https://github.com/ZzqiZQute/2019/06/08/Babylon-js-7-照相机/index.html">
 <meta property="og:site_name" content="我带你们打">
 <meta property="og:description" content="参考链接：https://doc.babylonjs.com/babylon101/cameras 一个3d场景需要至少一个照相机才能够渲染出来呈现给我们，所以照相机是3d场景中很重要的组成部分。 我们定义一个照相机，它的伪代码应该如下： 1const camera = new BABYLON.&amp;lt;kind&amp;gt;Camera(&quot;name&quot;,...,scene)  其中&amp;lt;k">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://github.com/2019/06/05/Babylon-js-7-照相机/camalphabeta.jpg">
-<meta property="og:image" content="https://github.com/2019/06/05/Babylon-js-7-照相机/camalphabeta2.jpg">
-<meta property="og:updated_time" content="2019-06-08T09:01:42.258Z">
+<meta property="og:image" content="https://github.com/2019/06/08/Babylon-js-7-照相机/camalphabeta.jpg">
+<meta property="og:image" content="https://github.com/2019/06/08/Babylon-js-7-照相机/camalphabeta2.jpg">
+<meta property="og:updated_time" content="2019-06-08T09:05:36.066Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Babylon.js-7 照相机">
 <meta name="twitter:description" content="参考链接：https://doc.babylonjs.com/babylon101/cameras 一个3d场景需要至少一个照相机才能够渲染出来呈现给我们，所以照相机是3d场景中很重要的组成部分。 我们定义一个照相机，它的伪代码应该如下： 1const camera = new BABYLON.&amp;lt;kind&amp;gt;Camera(&quot;name&quot;,...,scene)  其中&amp;lt;k">
-<meta name="twitter:image" content="https://github.com/2019/06/05/Babylon-js-7-照相机/camalphabeta.jpg">
+<meta name="twitter:image" content="https://github.com/2019/06/08/Babylon-js-7-照相机/camalphabeta.jpg">
   
   
     <link rel="icon" href="/favicon.png">
@@ -82,8 +82,8 @@
       <div class="outer">
         <section id="main"><article id="post-Babylon-js-7-照相机" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/06/05/Babylon-js-7-照相机/" class="article-date">
-  <time datetime="2019-06-05T12:23:50.000Z" itemprop="datePublished">2019-06-05</time>
+    <a href="/2019/06/08/Babylon-js-7-照相机/" class="article-date">
+  <time datetime="2019-06-08T09:04:50.000Z" itemprop="datePublished">2019-06-08</time>
 </a>
     
   </div>
@@ -196,11 +196,11 @@
 <div style="background-color:#F8F8F8;border-left:red 5px solid;padding:30px;margin-top:20px;margin-bottom:20px">有一点不同的是，对于相机控制，修改过的代码使用<code>canvas.attachControl(canvas,false)</code>。第二个参数是<code>noPreventDefault</code>，指不阻止默认事件，我们将其设置为<code>false</code>，即阻止默认事件。这样使用鼠标滚轮，或者触摸下滑时，就不会向下滚动，只会移动照相机。<br><br><i>但是，通用相机没有滚轮功能，所以在它上面还是会滚动页面</i>😀<i>。你可以在下面弧形旋转相机的地方试试。</i></div>
 
 <h2 id="弧形旋转相机-（Arc-Rotate-Camera）"><a href="#弧形旋转相机-（Arc-Rotate-Camera）" class="headerlink" title="弧形旋转相机 （Arc Rotate Camera）"></a>弧形旋转相机 （Arc Rotate Camera）</h2><p>弧形旋转相机是一个观察相机，它会在两条轴上旋转，我们可以通过鼠标左键拖动或者触摸移动将相机旋转。两个轴的旋转角度分别为<code>alpha</code>和<code>beta</code>（弧度），<code>radius</code>表示相机到达物体的距离。下面给出Babylon.js提供的示意图：</p>
-<img src="/2019/06/05/Babylon-js-7-照相机/camalphabeta.jpg" title="camalphabeta">
+<img src="/2019/06/08/Babylon-js-7-照相机/camalphabeta.jpg" title="camalphabeta">
 
 <p>我们观察到<code>alpha</code>轴和<code>beta</code>轴的变化范围是不同的。<code>alpha</code>的变化范围是<code>[0,2π]</code>，<code>beta</code>的变化范围是<code>[0,π]</code>，这是因为弧形旋转相机可以绕着<code>alpha</code>的轴进行旋转，我们可以想象有一个人，围着一个另一个人观察他的头部，它可以绕着这个人水平360°旋转，这是没问题的。而<code>beta</code>轴相当于俯视这个人或者平视，仰视这个人的头部，假设在仰视，如果幅度再大的话，他的脖子就断了。所以<code>beta</code>的变化范围是不是<code>[0,2π]</code>，而是<code>[0,π]</code>。</p>
 <p>上面这张图没有标注<code>xyz</code>轴，实际上当<code>alpha</code>，<code>beta</code>为0的时候，轴方向是下图所示的：</p>
-<img src="/2019/06/05/Babylon-js-7-照相机/camalphabeta2.jpg" title="camalphabeta2">
+<img src="/2019/06/08/Babylon-js-7-照相机/camalphabeta2.jpg" title="camalphabeta2">
 
 <p>你没有看到<code>y</code>轴，因为它正 <strong>指向你自己</strong> 。</p>
 <p>这个相机类似于CS：GO中玩家阵亡时的观察视角（不是第一人称视角）。顺便说一下，第一人称视角和自由视角都是使用通用相机，只是你在阵亡状态下不能控制第一人称视角的相机位置而已。</p>
@@ -496,7 +496,7 @@
       
     </div>
     <!-- <footer class="article-footer">
-      <a data-url="https://github.com/ZzqiZQute/2019/06/05/Babylon-js-7-照相机/" data-id="cjwnaj4vi000mtguttyzqxfum" class="article-share-link">Share</a>
+      <a data-url="https://github.com/ZzqiZQute/2019/06/08/Babylon-js-7-照相机/" data-id="cjwnan8vi000mpgutq1bko1en" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BabylonJS/">BabylonJS</a></li></ul>
@@ -507,19 +507,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2019/06/05/Webpack-1/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Webpack 1
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/06/04/Babylon-js-6-材质/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/06/05/Webpack-1/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Babylon.js-6 材质</div>
+      <div class="article-nav-title">Webpack 1</div>
     </a>
   
 </nav>
@@ -561,11 +552,11 @@
       <ul>
         
           <li>
-            <a href="/2019/06/05/Webpack-1/">Webpack 1</a>
+            <a href="/2019/06/08/Babylon-js-7-照相机/">Babylon.js-7 照相机</a>
           </li>
         
           <li>
-            <a href="/2019/06/05/Babylon-js-7-照相机/">Babylon.js-7 照相机</a>
+            <a href="/2019/06/05/Webpack-1/">Webpack 1</a>
           </li>
         
           <li>
