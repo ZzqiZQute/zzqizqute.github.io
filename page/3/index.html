@@ -74,10 +74,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-Babylon-js-6-材质" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Babylon-js-7-照相机" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/06/04/Babylon-js-6-材质/" class="article-date">
-  <time datetime="2019-06-04T06:51:06.000Z" itemprop="datePublished">2019-06-04</time>
+    <a href="/2019/06/08/Babylon-js-7-照相机/" class="article-date">
+  <time datetime="2019-06-08T09:04:50.000Z" itemprop="datePublished">2019-06-08</time>
 </a>
     
   </div>
@@ -88,7 +88,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/04/Babylon-js-6-材质/">Babylon.js-6 材质</a>
+      <a class="article-title" href="/2019/06/08/Babylon-js-7-照相机/">Babylon.js-7 照相机</a>
     </h1>
   
 
@@ -101,386 +101,501 @@
 <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script> <!-- Pointer Event Polyfill 便携设备触碰事件处理 -->
 <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
 
-<p>参考链接：<a href="https://doc.babylonjs.com/babylon101/materials" target="_blank" rel="noopener">https://doc.babylonjs.com/babylon101/materials</a></p>
-<p>我们可以在将材质附着在网格上实现渲染，可以设置颜色以及纹理。一个材质对象可以附着在多个网格上。</p>
-<h1 id="对光的反应"><a href="#对光的反应" class="headerlink" title="对光的反应"></a>对光的反应</h1><p>一个材质对象对光的反应取决于以下几项：</p>
-<ol>
-<li>漫反射 散射（Diffuse）在光的照射下的材质的基本颜色或纹理</li>
-<li>镜面反射（Specular） 高亮照射下材质的颜色或纹理</li>
-<li>放射（Emissive）材质自身发射的颜色或纹理</li>
-<li>环境（Ambient）由环境照亮时材质的颜色或纹理</li>
-</ol>
-<p>漫反射和镜面反射需要创建一个光源。环境颜色需要场景的环境颜色设置，给出一个环境背景光。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scene.ambientColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>参考链接：<a href="https://doc.babylonjs.com/babylon101/cameras" target="_blank" rel="noopener">https://doc.babylonjs.com/babylon101/cameras</a></p>
+<p>一个3d场景需要至少一个照相机才能够渲染出来呈现给我们，所以照相机是3d场景中很重要的组成部分。</p>
+<p>我们定义一个照相机，它的伪代码应该如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> BABYLON.&lt;kind&gt;Camera(<span class="string">"name"</span>,...,scene)</span><br></pre></td></tr></table></figure>
 
-<p>透明度 - 对于具有透明部分的图像，可以使用它以使材料的适当部分不可见。 这需要设置alpha属性。</p>
-<h2 id="颜色-（Color）"><a href="#颜色-（Color）" class="headerlink" title="颜色 （Color）"></a>颜色 （Color）</h2><p>使用以下代码创建一个标准材质<code>StandardMaterial</code></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myMaterial = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"myMaterial"</span>, scene)</span><br></pre></td></tr></table></figure>
+<p>其中<code>&lt;kind&gt;</code>表示相机种类，<code>...</code>是每个相机的参数都不太一样，用这个来表示一下。<code>name</code>是照相机的名称，<code>scene</code>是对应场景。</p>
+<h2 id="通用相机-（Universal-Camera）"><a href="#通用相机-（Universal-Camera）" class="headerlink" title="通用相机 （Universal Camera）"></a>通用相机 （Universal Camera）</h2><p>通用相机是在2.3版Babylon.js中推出的（当前版本是4），由键盘，鼠标，触摸或游戏手柄控制，具体取决于所使用的输入设备，无需指定控制器。它替代了自由相机（Free Camera）、触摸相机（Touch Camera）和游戏手柄相机（Gamepad Camera），当然这些都仍然可用。</p>
+<p>如果你玩过CS:GO这款游戏的话，当玩家阵亡时，切换到自由视角，使用的就是通用相机（类似的，因为不是Babylon引擎）。</p>
+<div style="background-color:#F8F8F8;border-left:red 5px solid;padding:30px;margin-top:20px;margin-bottom:20px">PS：当然如果你玩过的话，你应该知道WDNMD是什么意思。 233</div>
 
-<p>我们可以设置<code>myMaterial</code>的属性，对于颜色有以下属性</p>
-<ul>
-<li>diffuseColor</li>
-<li>specularColor</li>
-<li>emissiveColor</li>
-<li>ambientColor</li>
-</ul>
-<div style="background-color:#F8F8F8;border-left:red 5px solid;padding:30px;margin-bottom:20px">对于环境光颜色<code>ambientColor</code>，我们需要设置场景的环境光颜色才能够生效。</div>
+<p>使用以下方法创建通用相机：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> BABYLON.UniversalCamera(<span class="string">"camera"</span>,position,scene);</span><br></pre></td></tr></table></figure>
 
-<p>使用方法如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myMaterial = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"myMaterial"</span>, scene)</span><br><span class="line"></span><br><span class="line">myMaterial.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">myMaterial.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0.5</span>, <span class="number">0.6</span>, <span class="number">0.87</span>)</span><br><span class="line">myMaterial.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">myMaterial.ambientColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0.23</span>, <span class="number">0.98</span>, <span class="number">0.53</span>)</span><br><span class="line"></span><br><span class="line">mesh.material = myMaterial</span><br></pre></td></tr></table></figure>
-
-<p>我们创建一个场景来说明材质的颜色，我们使用BABYLON提供的创建场景方法创建了一个场景，同时对其进行修改。我们使用一个平行光<code>HemisphericLight</code>来观察确认材质的颜色。我们调整平行光的强度，但不超过最强强度的一半（防止看不到聚光灯照射的效果），观察光在材质上的渲染效果（这里使用了Babylon的<a href="https://preview.babylonjs.com/gui/babylon.gui.min.js" target="_blank" rel="noopener">GUI</a>）：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> createSceneColor = <span class="function"><span class="keyword">function</span> (<span class="params">engine,canvas</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> BABYLON.Scene(engine)</span><br><span class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> BABYLON.ArcRotateCamera(<span class="string">"Camera"</span>, -<span class="built_in">Math</span>.PI / <span class="number">2</span>, <span class="built_in">Math</span>.PI / <span class="number">3</span>, <span class="number">10</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">-1</span>,<span class="number">0</span>,<span class="number">0</span>), scene)</span><br><span class="line">    camera.attachControl(canvas, <span class="literal">false</span>)</span><br><span class="line">    <span class="keyword">var</span> mats = [</span><br><span class="line">        <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>),</span><br><span class="line">        <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>),</span><br><span class="line">        <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>),</span><br><span class="line">        <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">var</span> redMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"redMat"</span>, scene)</span><br><span class="line">    redMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">var</span> greenMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"greenMat"</span>, scene)</span><br><span class="line">    greenMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">var</span> blueMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"blueMat"</span>, scene)</span><br><span class="line">    blueMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">var</span> whiteMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"whiteMat"</span>, scene)</span><br><span class="line">    whiteMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">var</span> hemisphericLight = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">'hemisphericLight'</span>,<span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>),scene)</span><br><span class="line">    hemisphericLight.intensity=<span class="number">0</span></span><br><span class="line">    <span class="keyword">var</span> direction = <span class="number">1</span></span><br><span class="line">    <span class="keyword">const</span> anime=<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">        hemisphericLight.intensity+=direction*<span class="number">0.005</span></span><br><span class="line">        <span class="keyword">if</span>(hemisphericLight.intensity&gt;=<span class="number">0.5</span>)</span><br><span class="line">            direction =<span class="number">-1</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(hemisphericLight.intensity&lt;=<span class="number">0</span>)</span><br><span class="line">            direction = <span class="number">1</span></span><br><span class="line">        requestAnimationFrame(anime)</span><br><span class="line">    &#125;</span><br><span class="line">    anime()</span><br><span class="line">    <span class="comment">//red light</span></span><br><span class="line">    <span class="keyword">var</span> lightRed = <span class="keyword">new</span> BABYLON.SpotLight(<span class="string">"spotLight"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">-0.9</span>, <span class="number">1</span> , <span class="number">-1.8</span>), <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>), <span class="built_in">Math</span>.PI / <span class="number">2</span>, <span class="number">1.5</span>, scene)</span><br><span class="line">    lightRed.diffuse = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">    lightRed.specular = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="comment">//green light</span></span><br><span class="line">    <span class="keyword">var</span> lightGreen = <span class="keyword">new</span> BABYLON.SpotLight(<span class="string">"spotLight1"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">-0.5</span>), <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>), <span class="built_in">Math</span>.PI / <span class="number">2</span>, <span class="number">1.5</span>, scene)</span><br><span class="line">    lightGreen.diffuse = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line">    lightGreen.specular = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="comment">//blue light</span></span><br><span class="line">    <span class="keyword">var</span> lightBlue = <span class="keyword">new</span> BABYLON.SpotLight(<span class="string">"spotLight2"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0.9</span>, <span class="number">1</span>, <span class="number">-1.8</span>), <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>), <span class="built_in">Math</span>.PI / <span class="number">2</span>, <span class="number">1.5</span>, scene)</span><br><span class="line">    lightBlue.diffuse = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">    lightBlue.specular = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="comment">//white light</span></span><br><span class="line">    <span class="keyword">var</span> lightWhite = <span class="keyword">new</span> BABYLON.SpotLight(<span class="string">"spotLight3"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>), <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>), <span class="built_in">Math</span>.PI / <span class="number">2</span>, <span class="number">1.5</span>, scene)</span><br><span class="line">    lightWhite.diffuse = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">    lightWhite.specular = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">var</span> redSphere = BABYLON.MeshBuilder.CreateSphere(<span class="string">"sphere"</span>, &#123;<span class="attr">diameter</span>: <span class="number">0.25</span>&#125;, scene)</span><br><span class="line">    redSphere.material = redMat</span><br><span class="line">    redSphere.position = lightRed.position</span><br><span class="line">    <span class="keyword">var</span> greenSphere = BABYLON.MeshBuilder.CreateSphere(<span class="string">"sphere"</span>, &#123;<span class="attr">diameter</span>: <span class="number">0.25</span>&#125;, scene)</span><br><span class="line">    greenSphere.material = greenMat</span><br><span class="line">    greenSphere.position = lightGreen.position</span><br><span class="line">    <span class="keyword">var</span> blueSphere = BABYLON.MeshBuilder.CreateSphere(<span class="string">"sphere"</span>, &#123;<span class="attr">diameter</span>: <span class="number">0.25</span>&#125;, scene)</span><br><span class="line">    blueSphere.material = blueMat</span><br><span class="line">    blueSphere.position = lightBlue.position</span><br><span class="line">    <span class="keyword">var</span> whiteSphere = BABYLON.MeshBuilder.CreateSphere(<span class="string">"sphere"</span>, &#123;<span class="attr">diameter</span>: <span class="number">0.25</span>&#125;, scene)</span><br><span class="line">    whiteSphere.material = whiteMat</span><br><span class="line">    whiteSphere.position = lightWhite.position</span><br><span class="line">    <span class="keyword">var</span> groundMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"groundMat"</span>, scene)</span><br><span class="line">    groundMat.diffuseColor = mats[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">var</span> ground = BABYLON.MeshBuilder.CreateGround(<span class="string">"ground"</span>, &#123;<span class="attr">width</span>: <span class="number">4</span>, <span class="attr">height</span>: <span class="number">6</span>&#125;, scene)	</span><br><span class="line">    ground.material = groundMat</span><br><span class="line">    <span class="comment">/*******************GUI***********************/</span></span><br><span class="line">    <span class="keyword">var</span> makeYellow = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        groundMat.diffuseColor = mats[<span class="number">0</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> makePurple = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        groundMat.diffuseColor = mats[<span class="number">1</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> makeCyan = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        groundMat.diffuseColor = mats[<span class="number">2</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> makeWhite = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        groundMat.diffuseColor = mats[<span class="number">3</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> matGroup = <span class="keyword">new</span> BABYLON.GUI.RadioGroup(<span class="string">"Material Color"</span>, <span class="string">"radio"</span>)    </span><br><span class="line">    matGroup.addRadio(<span class="string">"Yellow"</span>, makeYellow, <span class="literal">true</span>)</span><br><span class="line">    matGroup.addRadio(<span class="string">"Purple"</span>, makePurple)</span><br><span class="line">    matGroup.addRadio(<span class="string">"Cyan"</span>, makeCyan)</span><br><span class="line">    matGroup.addRadio(<span class="string">"White"</span>, makeWhite)</span><br><span class="line">    <span class="keyword">var</span> advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI(<span class="string">"UI"</span>)</span><br><span class="line">    <span class="keyword">var</span> selectBox = <span class="keyword">new</span> BABYLON.GUI.SelectionPanel(<span class="string">"sp"</span>, [matGroup])</span><br><span class="line">    selectBox.width = <span class="number">0.4</span></span><br><span class="line">    selectBox.height = <span class="string">"50%"</span></span><br><span class="line">    selectBox.top = <span class="string">"4px"</span></span><br><span class="line">    selectBox.left = <span class="string">"4px"</span></span><br><span class="line">    selectBox.background = <span class="string">"white"</span></span><br><span class="line">    selectBox.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT</span><br><span class="line">    selectBox.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP</span><br><span class="line">    advancedTexture.addControl(selectBox)            </span><br><span class="line">    <span class="keyword">return</span> scene</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> canvasColor = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-6-color'</span>)</span><br><span class="line"><span class="keyword">const</span> engineColor = <span class="keyword">new</span> BABYLON.Engine(canvasColor,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> sceneColor=createSceneColor(engineColor,canvasColor) </span><br><span class="line">engineColor.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;sceneColor.render()&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>效果如下：</p>
-<div style="display:flex;justify-content:center;margin-top:20px;margin-bottom:20px">
-    <canvas id="renderCanvas-6-color" touch-action="none" style="width:400px;height:400px">
-    </canvas>
-</div>
-
-<script>
-    var createSceneColor = function (engine,canvas) {
-        var scene = new BABYLON.Scene(engine)
-        var camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2, Math.PI / 3, 10, new BABYLON.Vector3(-1,0,0), scene)
-        camera.attachControl(canvas, false)
-        var mats = [
-            new BABYLON.Color3(1, 1, 0),
-            new BABYLON.Color3(1, 0, 1),
-            new BABYLON.Color3(0, 1, 1),
-            new BABYLON.Color3(1, 1, 1)
-        ]
-        var redMat = new BABYLON.StandardMaterial("redMat", scene)
-        redMat.emissiveColor = new BABYLON.Color3(1, 0, 0)
-        var greenMat = new BABYLON.StandardMaterial("greenMat", scene)
-        greenMat.emissiveColor = new BABYLON.Color3(0, 1, 0)
-        var blueMat = new BABYLON.StandardMaterial("blueMat", scene)
-        blueMat.emissiveColor = new BABYLON.Color3(0, 0, 1)
-        var whiteMat = new BABYLON.StandardMaterial("whiteMat", scene)
-        whiteMat.emissiveColor = new BABYLON.Color3(1, 1, 1)
-        var hemisphericLight = new BABYLON.HemisphericLight('hemisphericLight',new BABYLON.Vector3(0,1,0),scene)
-        hemisphericLight.intensity=0
-        var direction = 1
-        const anime=()=>{
-            hemisphericLight.intensity+=direction*0.005
-            if(hemisphericLight.intensity>=0.5)
-                direction =-1
-            else if(hemisphericLight.intensity<=0)
-                direction = 1
-            requestAnimationFrame(anime)
-        }
-        anime()
-        //red light
-        var lightRed = new BABYLON.SpotLight("spotLight", new BABYLON.Vector3(-0.9, 1 , -1.8), new BABYLON.Vector3(0, -1, 0), Math.PI / 2, 1.5, scene)
-        lightRed.diffuse = new BABYLON.Color3(1, 0, 0)
-        lightRed.specular = new BABYLON.Color3(0, 0, 0)
-        //green light
-        var lightGreen = new BABYLON.SpotLight("spotLight1", new BABYLON.Vector3(0, 1, -0.5), new BABYLON.Vector3(0, -1, 0), Math.PI / 2, 1.5, scene)
-        lightGreen.diffuse = new BABYLON.Color3(0, 1, 0)
-        lightGreen.specular = new BABYLON.Color3(0, 0, 0)
-        //blue light
-        var lightBlue = new BABYLON.SpotLight("spotLight2", new BABYLON.Vector3(0.9, 1, -1.8), new BABYLON.Vector3(0, -1, 0), Math.PI / 2, 1.5, scene)
-        lightBlue.diffuse = new BABYLON.Color3(0, 0, 1)
-        lightBlue.specular = new BABYLON.Color3(0, 0, 0)
-        //white light
-        var lightWhite = new BABYLON.SpotLight("spotLight3", new BABYLON.Vector3(0, 1, 1), new BABYLON.Vector3(0, -1, 0), Math.PI / 2, 1.5, scene)
-        lightWhite.diffuse = new BABYLON.Color3(1, 1, 1)
-        lightWhite.specular = new BABYLON.Color3(0, 0, 0)
-        var redSphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 0.25}, scene)
-        redSphere.material = redMat
-        redSphere.position = lightRed.position
-        var greenSphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 0.25}, scene)
-        greenSphere.material = greenMat
-        greenSphere.position = lightGreen.position
-        var blueSphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 0.25}, scene)
-        blueSphere.material = blueMat
-        blueSphere.position = lightBlue.position
-        var whiteSphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 0.25}, scene)
-        whiteSphere.material = whiteMat
-        whiteSphere.position = lightWhite.position
-        var groundMat = new BABYLON.StandardMaterial("groundMat", scene)
-        groundMat.diffuseColor = mats[0]
-        var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 4, height: 6}, scene)    
-        ground.material = groundMat
-        /*******************GUI***********************/
-        var makeYellow = function() {
-            groundMat.diffuseColor = mats[0]
-        }
-        var makePurple = function() {
-            groundMat.diffuseColor = mats[1]
-        }
-        var makeCyan = function() {
-            groundMat.diffuseColor = mats[2]
-        }
-        var makeWhite = function() {
-            groundMat.diffuseColor = mats[3]
-        }
-        var matGroup = new BABYLON.GUI.RadioGroup("Material Color", "radio")    
-        matGroup.addRadio("Yellow", makeYellow, true)
-        matGroup.addRadio("Purple", makePurple)
-        matGroup.addRadio("Cyan", makeCyan)
-        matGroup.addRadio("White", makeWhite)
-        var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI")
-        var selectBox = new BABYLON.GUI.SelectionPanel("sp", [matGroup])
-        selectBox.width = 0.4
-        selectBox.height = "50%"
-        selectBox.top = "4px"
-        selectBox.left = "4px"
-        selectBox.background = "white"
-        selectBox.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT
-        selectBox.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP
-        advancedTexture.addControl(selectBox)            
-        return scene
-    }
-    const canvasColor = document.getElementById('renderCanvas-6-color')
-    const engineColor = new BABYLON.Engine(canvasColor,true)
-    const sceneColor=createSceneColor(engineColor,canvasColor) 
-    engineColor.runRenderLoop(function(){sceneColor.render()})
-</script>
-
-<p>环境光是在材质周围均匀照射的光，当材质设置环境光颜色，并且场景也设置环境颜色时，材质会产生均匀的颜色分布。我们可以这样理解，场景中的环境颜色<code>scene.ambientColor</code>是材质环境光颜色对应RGB通道的上限。</p>
-<p>以下效果来自<code>Babylon101 Material</code>的环境光部分，可以<a href="https://www.babylonjs-playground.com/#20OAV9#14" target="_blank" rel="noopener">修改代码</a>来观察环境光的影响。</p>
-<div style="display:flex;justify-content:center;margin-top:20px;margin-bottom:20px">
-    <canvas id="renderCanvas-6-ambient" touch-action="none" style="width:400px;height:400px">
-    </canvas>
-</div>
-
-
-<script>
-    var createSceneAmbient = function (engine,canvas) {
-        var scene = new BABYLON.Scene(engine)
-        var camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2,  Math.PI / 4, 5, BABYLON.Vector3.Zero(), scene)
-        camera.attachControl(canvas, false)
-
-        scene.ambientColor = new BABYLON.Color3(1, 1, 1)
-
-        //Light direction is up and left
-        var light = new BABYLON.HemisphericLight("hemiLight", new BABYLON.Vector3(-1, 1, 0), scene)
-        light.diffuse = new BABYLON.Color3(1, 0, 0)
-        light.specular = new BABYLON.Color3(0, 1, 0)
-        light.groundColor = new BABYLON.Color3(0, 1, 0)
-
-        var redMat = new BABYLON.StandardMaterial("redMat", scene)
-        redMat.ambientColor = new BABYLON.Color3(1, 0, 0)
-
-        var greenMat = new BABYLON.StandardMaterial("redMat", scene)
-        greenMat.ambientColor = new BABYLON.Color3(0, 1, 0)
-
-        //No ambient color
-        var sphere0 = BABYLON.MeshBuilder.CreateSphere("sphere0", {}, scene)
-        sphere0.position.x = -1.5    
-
-        //Red Ambient  
-        var sphere1 = BABYLON.MeshBuilder.CreateSphere("sphere1", {}, scene)
-        sphere1.material = redMat
-
-        //Green Ambient
-        var sphere2 = BABYLON.MeshBuilder.CreateSphere("sphere2", {}, scene)
-        sphere2.material = greenMat
-        sphere2.position.x = 1.5                
-
-        return scene
-    }
-    const canvasAmbient = document.getElementById('renderCanvas-6-ambient')
-    const engineAmbient = new BABYLON.Engine(canvasAmbient,true)
-    const sceneAmbient=createSceneAmbient(engineAmbient,canvasAmbient) 
-    engineAmbient.runRenderLoop(function(){sceneAmbient.render()})
-</script>
-
-<p>我们还可以通过设置材质的<code>alpha</code>通道来改变材质透明度，例如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myMaterial.alpha = <span class="number">0.5</span></span><br></pre></td></tr></table></figure>
-
-<p><a href="https://www.babylonjs-playground.com/#20OAV9#16" target="_blank" rel="noopener">官网示例</a>：</p>
-<div style="display:flex;justify-content:center;margin-top:20px;margin-bottom:20px">
-    <canvas id="renderCanvas-6-alpha" touch-action="none" style="width:400px;height:400px">
-    </canvas>
-</div>
-
-
-<script>
-    var createSceneAlpha = function (engine,canvas) {
-    var scene = new BABYLON.Scene(engine)
-    var camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2, 3 * Math.PI / 8, 5, BABYLON.Vector3.Zero(), scene)
-    camera.attachControl(canvas, false)
-
-
-    //Light direction is up and left
-    var light = new BABYLON.HemisphericLight("hemiLight", new BABYLON.Vector3(-1, 1, 0), scene)
-    light.diffuse = new BABYLON.Color3(1, 0, 0)
-    light.specular = new BABYLON.Color3(0, 1, 0)
-    light.groundColor = new BABYLON.Color3(0, 1, 0)
-
-    var redMat = new BABYLON.StandardMaterial("redMat", scene)
-    redMat.diffuseColor = new BABYLON.Color3(1, 0, 0)
-
-    var greenMat = new BABYLON.StandardMaterial("greenMat", scene)
-    greenMat.diffuseColor = new BABYLON.Color3(0, 1, 0)
-    greenMat.alpha = 0.5    
-
-    //Red  
-    var sphere1 = BABYLON.MeshBuilder.CreateSphere("sphere1", {}, scene)
-    sphere1.material = redMat
-    sphere1.position.z = 1.5
-
-    //Green Transparent
-    var sphere2 = BABYLON.MeshBuilder.CreateSphere("sphere2", {}, scene)
-    sphere2.material = greenMat                
-
-    return scene
-
-}
-    const canvasAlpha = document.getElementById('renderCanvas-6-alpha')
-    const engineAlpha = new BABYLON.Engine(canvasAlpha,true)
-    const sceneAlpha=createSceneAlpha(engineAlpha,canvasAlpha) 
-    engineAlpha.runRenderLoop(function(){sceneAlpha.render()})
-</script>
-
-<h2 id="纹理-（Texture）"><a href="#纹理-（Texture）" class="headerlink" title="纹理 （Texture）"></a>纹理 （Texture）</h2><p>使用以下代码创建一个标准材质<code>StandardMaterial</code></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myMaterial = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"myMaterial"</span>, scene) <span class="comment">// 与上面颜色部分相同</span></span><br></pre></td></tr></table></figure>
-
-<p>我们可以设置<code>myMaterial</code>的属性，对于纹理有以下属性</p>
-<ul>
-<li>diffuseTexture</li>
-<li>specularTexture</li>
-<li>emissiveTexture</li>
-<li>ambientTexture</li>
-</ul>
-<p>使用方法如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myMaterial = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"myMaterial"</span>, scene)</span><br><span class="line"></span><br><span class="line">myMaterial.diffuseTexture = <span class="keyword">new</span> BABYLON.Texture(<span class="string">"PATH TO IMAGE"</span>, scene)</span><br><span class="line">myMaterial.specularTexture = <span class="keyword">new</span> BABYLON.Texture(<span class="string">"PATH TO IMAGE"</span>, scene)</span><br><span class="line">myMaterial.emissiveTexture = <span class="keyword">new</span> BABYLON.Texture(<span class="string">"PATH TO IMAGE"</span>, scene)</span><br><span class="line">myMaterial.ambientTexture = <span class="keyword">new</span> BABYLON.Texture(<span class="string">"PATH TO IMAGE"</span>, scene)</span><br><span class="line"></span><br><span class="line">mesh.material = myMaterial</span><br></pre></td></tr></table></figure>
-
-<p>其中<code>&quot;PATH TO IMAGE&quot;</code>是纹理的路径。</p>
-<div style="background-color:#F8F8F8;border-left:red 5px solid;padding:30px;margin-bottom:20px">你可能注意到了，这个博客的横幅<code>banner</code>部分就是在一个平面<code>plane</code>上贴了一张约会大作战的图片纹理，你可以拖拽查看一下。</div>
-
-<p>我们将这张图片贴到一个盒子<code>box</code>上，使用如下代码实现：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> createSceneTexture = <span class="function"><span class="keyword">function</span> (<span class="params">engine,canvas</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> BABYLON.Scene(engine)</span><br><span class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> BABYLON.ArcRotateCamera(<span class="string">"Camera"</span>, -<span class="built_in">Math</span>.PI / <span class="number">2</span>,  <span class="built_in">Math</span>.PI / <span class="number">4</span>, <span class="number">4</span>, BABYLON.Vector3.Zero(), scene)</span><br><span class="line">    camera.attachControl(canvas, <span class="literal">false</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 打一个默认平行光（白色）</span></span><br><span class="line">    <span class="keyword">var</span> light = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">"hemiLight"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">-1</span>, <span class="number">1</span>, <span class="number">0</span>), scene)</span><br><span class="line">    <span class="comment">// 创建材质</span></span><br><span class="line">    <span class="keyword">var</span> material = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"material"</span>,scene)</span><br><span class="line">    <span class="comment">//创建并选择纹理</span></span><br><span class="line">    material.diffuseTexture = <span class="keyword">new</span> BABYLON.Texture(<span class="string">"https://zzqizqute.github.io/css/images/banner.jpg"</span>,scene)</span><br><span class="line">    <span class="comment">//创建盒子</span></span><br><span class="line">    <span class="keyword">var</span> box = BABYLON.MeshBuilder.CreateBox(<span class="string">"sphere"</span>,&#123;<span class="attr">size</span>:<span class="number">2</span>&#125;,scene)</span><br><span class="line">    <span class="comment">//将材质应用于盒子</span></span><br><span class="line">    box.material=material</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> scene</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> canvasTexture = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-6-texture'</span>)</span><br><span class="line"><span class="keyword">const</span> engineTexture = <span class="keyword">new</span> BABYLON.Engine(canvasTexture,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> sceneTexture = createSceneTexture(engineTexture,canvasTexture) </span><br><span class="line">engineTexture.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;sceneTexture.render()&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>效果如下：</p>
-<div style="display:flex;justify-content:center;margin-top:20px;margin-bottom:20px">
-    <canvas id="renderCanvas-6-texture" touch-action="none" style="width:400px;height:400px">
-    </canvas>
-</div>
-
-<script>
-    var createSceneTexture = function (engine,canvas) {
-        var scene = new BABYLON.Scene(engine)
-        var camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2,  Math.PI / 4, 4, BABYLON.Vector3.Zero(), scene)
-        camera.attachControl(canvas, false)
-
-        // 打一个默认平行光（白色）
-        var light = new BABYLON.HemisphericLight("hemiLight", new BABYLON.Vector3(-1, 1, 0), scene)
-        // 创建材质
-        var material = new BABYLON.StandardMaterial("material",scene)
-        //创建并选择纹理
-        material.diffuseTexture = new BABYLON.Texture("https://zzqizqute.github.io/css/images/banner.jpg",scene)
-        //创建盒子
-        var box = BABYLON.MeshBuilder.CreateBox("sphere",{size:2},scene)
-        //将材质应用于盒子
-        box.material=material
-
-        return scene
-    }
-    const canvasTexture = document.getElementById('renderCanvas-6-texture')
-    const engineTexture = new BABYLON.Engine(canvasTexture,true)
-    const sceneTexture = createSceneTexture(engineTexture,canvasTexture) 
-    engineTexture.runRenderLoop(function(){sceneTexture.render()})
-</script>
-
-<p>同样的，我们可以设置材质的<code>alpha</code>通道使其透明，但是对于纹理，需要设置纹理<code>Texture</code>的<code>hasAlpha</code>属性为<code>true</code>：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">myMaterial.alpha = <span class="number">0.5</span></span><br><span class="line">myMaterial.diffuseTexture.hasAlpha = <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-
-<div style="background-color:#F8F8F8;border-left:red 5px solid;padding:30px;margin-top:20px;margin-bottom:20px">如果材质是<code>png</code>格式的图片，并且包含<code>alpha</code>通道的时候，将会根据<code>alpha</code>通道的值进行透明处理。</div>
-
-<h2 id="背景剔除-（Back-Face-Culling）"><a href="#背景剔除-（Back-Face-Culling）" class="headerlink" title="背景剔除 （Back Face Culling）"></a>背景剔除 （Back Face Culling）</h2><p>默认情况下3d渲染时为提高性能，不渲染背面。对于透明材质，默认情况下其<code>backFaceCulling</code>属性为<code>true</code>，如果在前面观察，将看不到透过透明区域的背面形状。此时将<code>backFaceCulling</code>设置为<code>false</code>，就可以看到了。下面是Babylon提供的代码，我们对其进行修改，使其一直旋转，并定时切换<code>backFaceCulling</code>属性，代码如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">var</span> createSceneBackFaceCulling = <span class="function"><span class="keyword">function</span> (<span class="params">engine,canvas</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> BABYLON.Scene(engine)</span><br><span class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> BABYLON.ArcRotateCamera(<span class="string">"Camera"</span>, <span class="number">13</span> * <span class="built_in">Math</span>.PI / <span class="number">8</span>, <span class="built_in">Math</span>.PI / <span class="number">4</span>, <span class="number">3</span>, BABYLON.Vector3.Zero(), scene)</span><br><span class="line">    camera.attachControl(canvas, <span class="literal">false</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> light = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">"light1"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>), scene)</span><br><span class="line">    light.intensity = <span class="number">0.7</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> pl = <span class="keyword">new</span> BABYLON.PointLight(<span class="string">"pl"</span>, BABYLON.Vector3.Zero(), scene)</span><br><span class="line">    pl.diffuse = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">    pl.specular = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">    pl.intensity = <span class="number">0.8</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> mat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"dog"</span>, scene)</span><br><span class="line">    mat.diffuseTexture = <span class="keyword">new</span> BABYLON.Texture(<span class="string">"https://upload.wikimedia.org/wikipedia/commons/8/87/Alaskan_Malamute%2BBlank.png"</span>, scene)</span><br><span class="line">    mat.diffuseTexture.hasAlpha = <span class="literal">true</span></span><br><span class="line">    mat.backFaceCulling = <span class="literal">true</span></span><br><span class="line">    <span class="keyword">var</span> box = BABYLON.MeshBuilder.CreateBox(<span class="string">"box"</span>, &#123;&#125;, scene)</span><br><span class="line">    box.material = mat</span><br><span class="line">    <span class="keyword">var</span> backfacecullingHint=<span class="built_in">document</span>.querySelector(<span class="string">'#backfaceculling-hint'</span>)</span><br><span class="line">    backfacecullingHint.innerText=<span class="string">"背景剔除"</span></span><br><span class="line">    <span class="keyword">const</span> anime = <span class="function"><span class="params">()</span>=&gt;</span> &#123;</span><br><span class="line">        box.rotation.y+=<span class="number">0.04</span></span><br><span class="line">        <span class="keyword">if</span>(box.rotation.y&gt;=<span class="built_in">Math</span>.PI*<span class="number">2</span>)&#123;</span><br><span class="line">            box.rotation.y=<span class="number">0</span></span><br><span class="line">            mat.backFaceCulling=!mat.backFaceCulling</span><br><span class="line">            <span class="keyword">if</span>(mat.backFaceCulling)&#123;</span><br><span class="line">                backfacecullingHint.style.textDecoration=<span class="string">""</span></span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                backfacecullingHint.style.textDecoration=<span class="string">"line-through"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        requestAnimationFrame(anime)</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    anime()</span><br><span class="line">    <span class="keyword">return</span> scene</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> canvasBackFaceCulling = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-6-backfaceculling'</span>)</span><br><span class="line"><span class="keyword">const</span> engineBackFaceCulling = <span class="keyword">new</span> BABYLON.Engine(canvasBackFaceCulling,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> sceneBackFaceCulling = createSceneBackFaceCulling(engineBackFaceCulling,canvasBackFaceCulling) </span><br><span class="line">engineBackFaceCulling.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;sceneBackFaceCulling.render()&#125;)</span><br></pre></td></tr></table></figure>
+<p>其中<code>position</code>表示相机的位置，我们还可以通过<code>camera.setPosition(newPosition)</code>方法重新定义相机位置，也可以使用<code>camera.setTarget(targetPosition)</code>方法设置观察位置。</p>
+<p>使用Babylon提供的代码演示一下，你可以使用鼠标点击左键拖动，或者触摸移动视角，使用方向键进行前后左右移动，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> createSceneUniversalCamera = <span class="function"><span class="keyword">function</span> (<span class="params">engine,canvas</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// This creates a basic Babylon Scene object (non-mesh)</span></span><br><span class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> BABYLON.Scene(engine);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/********** UNIVERSAL CAMERA EXAMPLE **************************/</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// This creates and positions a universal camera (non-mesh)</span></span><br><span class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> BABYLON.UniversalCamera(<span class="string">"camera"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">-10</span>), scene);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This targets the camera to scene origin</span></span><br><span class="line">    camera.setTarget(BABYLON.Vector3.Zero());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This attaches the camera to the canvas</span></span><br><span class="line">    camera.attachControl(canvas, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**************************************************************/</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// This creates a light, aiming 0,1,0 - to the sky (non-mesh)</span></span><br><span class="line">    <span class="keyword">var</span> light = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">"light"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>), scene);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//Materials</span></span><br><span class="line">    <span class="keyword">var</span> redMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"red"</span>, scene);</span><br><span class="line">    redMat.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    redMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    redMat.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> greenMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"green"</span>, scene);</span><br><span class="line">    greenMat.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    greenMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    greenMat.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> blueMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"blue"</span>, scene);</span><br><span class="line">    blueMat.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    blueMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    blueMat.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Shapes</span></span><br><span class="line">    <span class="keyword">var</span> plane1 = <span class="keyword">new</span> BABYLON.Mesh.CreatePlane(<span class="string">"plane1"</span>, <span class="number">3</span>, scene, <span class="literal">true</span>, BABYLON.Mesh.DOUBLESIDE);</span><br><span class="line">    plane1.position.x = <span class="number">-3</span>;</span><br><span class="line">    plane1.position.z = <span class="number">0</span>;</span><br><span class="line">    plane1.material = redMat;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> plane2 = <span class="keyword">new</span> BABYLON.Mesh.CreatePlane(<span class="string">"plane2"</span>, <span class="number">3</span>, scene, <span class="literal">true</span>, BABYLON.Mesh.DOUBLESIDE);</span><br><span class="line">    plane2.position.x = <span class="number">3</span>;</span><br><span class="line">    plane2.position.z = <span class="number">-1.5</span>;</span><br><span class="line">    plane2.material = greenMat;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> plane3 = <span class="keyword">new</span> BABYLON.Mesh.CreatePlane(<span class="string">"plane3"</span>, <span class="number">3</span>, scene, <span class="literal">true</span>, BABYLON.Mesh.DOUBLESIDE);</span><br><span class="line">    plane3.position.x = <span class="number">3</span>;</span><br><span class="line">    plane3.position.z = <span class="number">1.5</span>;</span><br><span class="line">    plane3.material = blueMat;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> ground = BABYLON.Mesh.CreateGround(<span class="string">"ground1"</span>, <span class="number">10</span>, <span class="number">10</span>, <span class="number">2</span>, scene);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> scene;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> canvasUniversalCamera = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-7-universalcamera'</span>)</span><br><span class="line"><span class="keyword">const</span> engineUniversalCamera = <span class="keyword">new</span> BABYLON.Engine(canvasUniversalCamera,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> sceneUniversalCamera = createSceneUniversalCamera(engineUniversalCamera,canvasUniversalCamera) </span><br><span class="line">engineUniversalCamera.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;sceneUniversalCamera.render()&#125;)</span><br></pre></td></tr></table></figure>
 
 <p>效果如下：</p>
 <div style="display:flex;flex-direction:column;align-items:center;margin-top:20px;margin-bottom:20px">
-    <canvas id="renderCanvas-6-backfaceculling" touch-action="none" style="width:400px;height:400px">
+    <canvas id="renderCanvas-7-universalcamera" touch-action="none" style="width:400px;height:400px">
     </canvas>
-    <div id="backfaceculling-hint" style="margin-top:20px;font-size:32px"></div>
 </div>
 
 <script>
-    var createSceneBackFaceCulling = function (engine,canvas) {
-        var scene = new BABYLON.Scene(engine)
-        var camera = new BABYLON.ArcRotateCamera("Camera", 13 * Math.PI / 8, Math.PI / 4, 3, BABYLON.Vector3.Zero(), scene)
-        camera.attachControl(canvas, false)
+    var createSceneUniversalCamera = function (engine,canvas) {
+            // This creates a basic Babylon Scene object (non-mesh)
+        var scene = new BABYLON.Scene(engine);
 
-        var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene)
-        light.intensity = 0.7
+        /********** UNIVERSAL CAMERA EXAMPLE **************************/
 
-        var pl = new BABYLON.PointLight("pl", BABYLON.Vector3.Zero(), scene)
-        pl.diffuse = new BABYLON.Color3(1, 1, 1)
-        pl.specular = new BABYLON.Color3(1, 1, 1)
-        pl.intensity = 0.8
+        // This creates and positions a universal camera (non-mesh)
+        var camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(0, 0, -10), scene);
 
-        var mat = new BABYLON.StandardMaterial("dog", scene)
-        mat.diffuseTexture = new BABYLON.Texture("https://upload.wikimedia.org/wikipedia/commons/8/87/Alaskan_Malamute%2BBlank.png", scene)
-        mat.diffuseTexture.hasAlpha = true
-        mat.backFaceCulling = true
-        var box = BABYLON.MeshBuilder.CreateBox("box", {}, scene)
-        box.material = mat
-        var backfacecullingHint=document.querySelector('#backfaceculling-hint')
-        backfacecullingHint.innerText="背景剔除"
-        const anime = ()=> {
-            box.rotation.y+=0.04
-            if(box.rotation.y>=Math.PI*2){
-                box.rotation.y=0
-                mat.backFaceCulling=!mat.backFaceCulling
-                if(mat.backFaceCulling){
-                    backfacecullingHint.style.textDecoration=""
-                }else{
-                    backfacecullingHint.style.textDecoration="line-through"
-                }
-            }
-            requestAnimationFrame(anime)
-        }
-        anime()
-        return scene
+        // This targets the camera to scene origin
+        camera.setTarget(BABYLON.Vector3.Zero());
+
+        // This attaches the camera to the canvas
+        camera.attachControl(canvas, false);
+
+        /**************************************************************/
+
+        // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+        var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+        //Materials
+        var redMat = new BABYLON.StandardMaterial("red", scene);
+        redMat.diffuseColor = new BABYLON.Color3(1, 0, 0);
+        redMat.emissiveColor = new BABYLON.Color3(1, 0, 0);
+        redMat.specularColor = new BABYLON.Color3(1, 0, 0);
+
+        var greenMat = new BABYLON.StandardMaterial("green", scene);
+        greenMat.diffuseColor = new BABYLON.Color3(0, 1, 0);
+        greenMat.emissiveColor = new BABYLON.Color3(0, 1, 0);
+        greenMat.specularColor = new BABYLON.Color3(0, 1, 0);
+
+        var blueMat = new BABYLON.StandardMaterial("blue", scene);
+        blueMat.diffuseColor = new BABYLON.Color3(0, 0, 1);
+        blueMat.emissiveColor = new BABYLON.Color3(0, 0, 1);
+        blueMat.specularColor = new BABYLON.Color3(0, 0, 1);
+
+        // Shapes
+        var plane1 = new BABYLON.Mesh.CreatePlane("plane1", 3, scene, true, BABYLON.Mesh.DOUBLESIDE);
+        plane1.position.x = -3;
+        plane1.position.z = 0;
+        plane1.material = redMat;
+
+        var plane2 = new BABYLON.Mesh.CreatePlane("plane2", 3, scene, true, BABYLON.Mesh.DOUBLESIDE);
+        plane2.position.x = 3;
+        plane2.position.z = -1.5;
+        plane2.material = greenMat;
+
+        var plane3 = new BABYLON.Mesh.CreatePlane("plane3", 3, scene, true, BABYLON.Mesh.DOUBLESIDE);
+        plane3.position.x = 3;
+        plane3.position.z = 1.5;
+        plane3.material = blueMat;
+
+        var ground = BABYLON.Mesh.CreateGround("ground1", 10, 10, 2, scene);
+
+        return scene;
     }
-    const canvasBackFaceCulling = document.getElementById('renderCanvas-6-backfaceculling')
-    const engineBackFaceCulling = new BABYLON.Engine(canvasBackFaceCulling,true)
-    const sceneBackFaceCulling = createSceneBackFaceCulling(engineBackFaceCulling,canvasBackFaceCulling) 
-    engineBackFaceCulling.runRenderLoop(function(){sceneBackFaceCulling.render()})
+    const canvasUniversalCamera = document.getElementById('renderCanvas-7-universalcamera')
+    const engineUniversalCamera = new BABYLON.Engine(canvasUniversalCamera,true)
+    const sceneUniversalCamera = createSceneUniversalCamera(engineUniversalCamera,canvasUniversalCamera) 
+    engineUniversalCamera.runRenderLoop(function(){sceneUniversalCamera.render()})
 </script>
 
-<h2 id="网格图"><a href="#网格图" class="headerlink" title="网格图"></a>网格图</h2><p>可以显示<code>mesh</code>的网格骨架。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myMaterial.wireframe = <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<div style="background-color:#F8F8F8;border-left:red 5px solid;padding:30px;margin-top:20px;margin-bottom:20px">有一点不同的是，对于相机控制，修改过的代码使用<code>canvas.attachControl(canvas,false)</code>。第二个参数是<code>noPreventDefault</code>，指不阻止默认事件，我们将其设置为<code>false</code>，即阻止默认事件。这样使用鼠标滚轮，或者触摸下滑时，就不会向下滚动，只会移动照相机。<br><br><i>但是，通用相机没有滚轮功能，所以在它上面还是会滚动页面</i>😀<i>。你可以在下面弧形旋转相机的地方试试。</i></div>
 
-<p>示例代码如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> createSceneWireFrame = <span class="function"><span class="keyword">function</span> (<span class="params">engine,canvas</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> BABYLON.Scene(engine)</span><br><span class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> BABYLON.ArcRotateCamera(<span class="string">"Camera"</span>, <span class="number">13</span> * <span class="built_in">Math</span>.PI / <span class="number">8</span>, <span class="built_in">Math</span>.PI / <span class="number">4</span>, <span class="number">2</span>, BABYLON.Vector3.Zero(), scene)</span><br><span class="line">    camera.attachControl(canvas, <span class="literal">false</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> light = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">"light1"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>), scene)</span><br><span class="line">    light.intensity = <span class="number">0.7</span></span><br><span class="line">    <span class="keyword">var</span> sphere = BABYLON.MeshBuilder.CreateSphere(<span class="string">"sphere"</span>,&#123;&#125;,scene)</span><br><span class="line">    <span class="keyword">var</span> material = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"material"</span>,scene)</span><br><span class="line">    material.diffuseColor=<span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">    material.wireframe=<span class="literal">true</span></span><br><span class="line">    sphere.material=material</span><br><span class="line">    <span class="keyword">return</span> scene</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> canvasWireFrame = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-6-wireframe'</span>)</span><br><span class="line"><span class="keyword">const</span> engineWireFrame = <span class="keyword">new</span> BABYLON.Engine(canvasWireFrame,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> sceneWireFrame = createSceneWireFrame(engineWireFrame,canvasWireFrame) </span><br><span class="line">engineWireFrame.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;sceneWireFrame.render()&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="弧形旋转相机-（Arc-Rotate-Camera）"><a href="#弧形旋转相机-（Arc-Rotate-Camera）" class="headerlink" title="弧形旋转相机 （Arc Rotate Camera）"></a>弧形旋转相机 （Arc Rotate Camera）</h2><p>弧形旋转相机是一个观察相机，它会在两条轴上旋转，我们可以通过鼠标左键拖动或者触摸移动将相机旋转。两个轴的旋转角度分别为<code>alpha</code>和<code>beta</code>（弧度），<code>radius</code>表示相机到达物体的距离。下面给出Babylon.js提供的示意图：</p>
+<img src="/2019/06/08/Babylon-js-7-照相机/camalphabeta.jpg" title="camalphabeta">
+
+<p>我们观察到<code>alpha</code>轴和<code>beta</code>轴的变化范围是不同的。<code>alpha</code>的变化范围是<code>[0,2π]</code>，<code>beta</code>的变化范围是<code>[0,π]</code>，这是因为弧形旋转相机可以绕着<code>alpha</code>的轴进行旋转，我们可以想象有一个人，围着一个另一个人观察他的头部，它可以绕着这个人水平360°旋转，这是没问题的。而<code>beta</code>轴相当于俯视这个人或者平视，仰视这个人的头部，假设在仰视，如果幅度再大的话，他的脖子就断了。所以<code>beta</code>的变化范围是不是<code>[0,2π]</code>，而是<code>[0,π]</code>。</p>
+<p>上面这张图没有标注<code>xyz</code>轴，实际上当<code>alpha</code>，<code>beta</code>为0的时候，轴方向是下图所示的：</p>
+<img src="/2019/06/08/Babylon-js-7-照相机/camalphabeta2.jpg" title="camalphabeta2">
+
+<p>你没有看到<code>y</code>轴，因为它正 <strong>指向你自己</strong> 。</p>
+<p>这个相机类似于CS：GO中玩家阵亡时的观察视角（不是第一人称视角）。顺便说一下，第一人称视角和自由视角都是使用通用相机，只是你在阵亡状态下不能控制第一人称视角的相机位置而已。</p>
+<p>使用以下方法创建弧形旋转相机：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> BABYLON.UniversalCamera(<span class="string">"camera"</span>,alpha,beta,radius,position,scene);</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>alpha</code>表示alpha角（弧度），<code>beta</code>表示beta角（弧度），<code>radius</code>表示相机位置到观察位置的距离（半径），<code>position</code>表示相机的位置，同样的，我们还可以通过<code>camera.setPosition(newPosition)</code>方法重新定义相机位置，也可以使用<code>camera.setTarget(targetPosition)</code>方法设置观察位置。在弧形旋转相机中，这样会覆盖构造函数中<code>alpha</code>，<code>beta</code>，<code>radius</code>参数。</p>
+<p>我们还是使用Babylon.js的代码来演示弧形旋转相机，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> createSceneArcRotateCamera = <span class="function"><span class="keyword">function</span> (<span class="params">engine,canvas</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// This creates a basic Babylon Scene object (non-mesh)</span></span><br><span class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> BABYLON.Scene(engine);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/********** ARC ROTATE CAMERA EXAMPLE **************************/</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Creates, angles, distances and targets the camera</span></span><br><span class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> BABYLON.ArcRotateCamera(<span class="string">"Camera"</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>), scene);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This positions the camera</span></span><br><span class="line">    camera.setPosition(<span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">-10</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This attaches the camera to the canvas</span></span><br><span class="line">    camera.attachControl(canvas, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**************************************************************/</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// This creates a light, aiming 0,1,0 - to the sky (non-mesh)</span></span><br><span class="line">    <span class="keyword">var</span> light = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">"light"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>), scene);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//Materials</span></span><br><span class="line">    <span class="keyword">var</span> redMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"red"</span>, scene);</span><br><span class="line">    redMat.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    redMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    redMat.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> greenMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"green"</span>, scene);</span><br><span class="line">    greenMat.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    greenMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    greenMat.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> blueMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"blue"</span>, scene);</span><br><span class="line">    blueMat.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    blueMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    blueMat.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Shapes</span></span><br><span class="line">    <span class="keyword">var</span> plane1 = <span class="keyword">new</span> BABYLON.Mesh.CreatePlane(<span class="string">"plane1"</span>, <span class="number">3</span>, scene, <span class="literal">true</span>, BABYLON.Mesh.DOUBLESIDE);</span><br><span class="line">    plane1.position.x = <span class="number">-3</span>;</span><br><span class="line">    plane1.position.z = <span class="number">0</span>;</span><br><span class="line">    plane1.material = redMat;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> plane2 = <span class="keyword">new</span> BABYLON.Mesh.CreatePlane(<span class="string">"plane2"</span>, <span class="number">3</span>, scene, <span class="literal">true</span>, BABYLON.Mesh.DOUBLESIDE);</span><br><span class="line">    plane2.position.x = <span class="number">3</span>;</span><br><span class="line">    plane2.position.z = <span class="number">-1.5</span>;</span><br><span class="line">    plane2.material = greenMat;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> plane3 = <span class="keyword">new</span> BABYLON.Mesh.CreatePlane(<span class="string">"plane3"</span>, <span class="number">3</span>, scene, <span class="literal">true</span>, BABYLON.Mesh.DOUBLESIDE);</span><br><span class="line">    plane3.position.x = <span class="number">3</span>;</span><br><span class="line">    plane3.position.z = <span class="number">1.5</span>;</span><br><span class="line">    plane3.material = blueMat;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> ground = BABYLON.Mesh.CreateGround(<span class="string">"ground1"</span>, <span class="number">10</span>, <span class="number">10</span>, <span class="number">2</span>, scene);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> scene;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> canvasArcRotateCamera = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-7-arcrotatecamera'</span>)</span><br><span class="line"><span class="keyword">const</span> engineArcRotateCamera = <span class="keyword">new</span> BABYLON.Engine(canvasArcRotateCamera,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> sceneArcRotateCamera = createSceneArcRotateCamera(engineArcRotateCamera,canvasArcRotateCamera) </span><br><span class="line">engineArcRotateCamera.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;sceneArcRotateCamera.render()&#125;)</span><br></pre></td></tr></table></figure>
 
 <p>效果如下：</p>
 <div style="display:flex;flex-direction:column;align-items:center;margin-top:20px;margin-bottom:20px">
-    <canvas id="renderCanvas-6-wireframe" touch-action="none" style="width:400px;height:400px">
+    <canvas id="renderCanvas-7-arcrotatecamera" touch-action="none" style="width:400px;height:400px">
     </canvas>
 </div>
 
 <script>
-    var createSceneWireFrame = function (engine,canvas) {
-        var scene = new BABYLON.Scene(engine)
-        var camera = new BABYLON.ArcRotateCamera("Camera", 13 * Math.PI / 8, Math.PI / 4, 2, BABYLON.Vector3.Zero(), scene)
-        camera.attachControl(canvas, false)
+    var createSceneArcRotateCamera = function (engine,canvas) {
+        // This creates a basic Babylon Scene object (non-mesh)
+        var scene = new BABYLON.Scene(engine);
 
-        var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene)
-        light.intensity = 0.7
-        var sphere = BABYLON.MeshBuilder.CreateSphere("sphere",{},scene)
-        var material = new BABYLON.StandardMaterial("material",scene)
-        material.diffuseColor=new BABYLON.Color3(1,1,1)
-        material.wireframe=true
-        sphere.material=material
-        return scene
+        /********** ARC ROTATE CAMERA EXAMPLE **************************/
+
+        // Creates, angles, distances and targets the camera
+        var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
+
+        // This positions the camera
+        camera.setPosition(new BABYLON.Vector3(0, 0, -10));
+
+        // This attaches the camera to the canvas
+        camera.attachControl(canvas, false);
+
+        /**************************************************************/
+
+        // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+        var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+        //Materials
+        var redMat = new BABYLON.StandardMaterial("red", scene);
+        redMat.diffuseColor = new BABYLON.Color3(1, 0, 0);
+        redMat.emissiveColor = new BABYLON.Color3(1, 0, 0);
+        redMat.specularColor = new BABYLON.Color3(1, 0, 0);
+
+        var greenMat = new BABYLON.StandardMaterial("green", scene);
+        greenMat.diffuseColor = new BABYLON.Color3(0, 1, 0);
+        greenMat.emissiveColor = new BABYLON.Color3(0, 1, 0);
+        greenMat.specularColor = new BABYLON.Color3(0, 1, 0);
+
+        var blueMat = new BABYLON.StandardMaterial("blue", scene);
+        blueMat.diffuseColor = new BABYLON.Color3(0, 0, 1);
+        blueMat.emissiveColor = new BABYLON.Color3(0, 0, 1);
+        blueMat.specularColor = new BABYLON.Color3(0, 0, 1);
+
+        // Shapes
+        var plane1 = new BABYLON.Mesh.CreatePlane("plane1", 3, scene, true, BABYLON.Mesh.DOUBLESIDE);
+        plane1.position.x = -3;
+        plane1.position.z = 0;
+        plane1.material = redMat;
+
+        var plane2 = new BABYLON.Mesh.CreatePlane("plane2", 3, scene, true, BABYLON.Mesh.DOUBLESIDE);
+        plane2.position.x = 3;
+        plane2.position.z = -1.5;
+        plane2.material = greenMat;
+
+        var plane3 = new BABYLON.Mesh.CreatePlane("plane3", 3, scene, true, BABYLON.Mesh.DOUBLESIDE);
+        plane3.position.x = 3;
+        plane3.position.z = 1.5;
+        plane3.material = blueMat;
+
+        var ground = BABYLON.Mesh.CreateGround("ground1", 10, 10, 2, scene);
+
+        return scene;
     }
-    const canvasWireFrame = document.getElementById('renderCanvas-6-wireframe')
-    const engineWireFrame = new BABYLON.Engine(canvasWireFrame,true)
-    const sceneWireFrame = createSceneWireFrame(engineWireFrame,canvasWireFrame) 
-    engineWireFrame.runRenderLoop(function(){sceneWireFrame.render()})
+    const canvasArcRotateCamera = document.getElementById('renderCanvas-7-arcrotatecamera')
+    const engineArcRotateCamera = new BABYLON.Engine(canvasArcRotateCamera,true)
+    const sceneArcRotateCamera = createSceneArcRotateCamera(engineArcRotateCamera,canvasArcRotateCamera) 
+    engineArcRotateCamera.runRenderLoop(function(){sceneArcRotateCamera.render()})
 </script>
 
+<h2 id="跟随相机-（Follow-Camera）"><a href="#跟随相机-（Follow-Camera）" class="headerlink" title="跟随相机 （Follow Camera）"></a>跟随相机 （Follow Camera）</h2><p>跟随相机是一个“不自由”的相机，因为它要追随观察物体的移动来进行其自身位置的更新。</p>
+<p>使用以下方法创建跟随相机：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> BABYLON.FollowCamera(<span class="string">"camera"</span>,position,scene,lockedTarget);</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>position</code>表示相机的初始位置，<code>lockedTarget</code>（Nullable<abstractmesh>，可选）表示相机跟随的物体，由于跟随相机的部分位置信息不受我们控制，我们可以通过设置如下参数来改变跟随相机的姿态：</abstractmesh></p>
+<ul>
+<li><p>camera.radius number 相机到观察物体的目标距离 目标距离指的是当跟随相机趋于稳定时相机到达观察物体的距离</p>
+</li>
+<li><p>camera.heightOffset number 相机到观察物体中心的目标高度</p>
+</li>
+<li><p>camera.rotationOffset number 相机到物体的xy平面的目标旋转角度</p>
+</li>
+<li><p>camera.cameraAcceleration number 相机从当前位置移动到目标位置的加速度</p>
+</li>
+<li><p>camera.maxCameraSpeed number 相机的最大速度</p>
+</li>
+<li><p>camera.lockedTarget Mesh 相机的跟随目标 （2.5版本及其之后版本）</p>
+</li>
+<li><p>camrea.target Mesh 相机的跟随目标 （2.4版本及其之前版本）</p>
+</li>
+</ul>
+<p>我们使用Babylon提供的代码，创建一个场景，场景中有400个大小相同的立方体，还有一个立方体上面有材质贴图。这个带有贴图的立方体在不断移动,代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">var</span> createSceneFollowCamera = <span class="function"><span class="keyword">function</span> (<span class="params">engine,canvas</span>) </span>&#123;</span><br><span class="line">     <span class="comment">// This creates a basic Babylon Scene object (non-mesh)</span></span><br><span class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> BABYLON.Scene(engine);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/********** FOLLOW CAMERA EXAMPLE **************************/</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// This creates and initially positions a follow camera 	</span></span><br><span class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> BABYLON.FollowCamera(<span class="string">"FollowCam"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">10</span>, <span class="number">-10</span>), scene);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//The goal distance of camera from target</span></span><br><span class="line">    camera.radius = <span class="number">30</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// The goal height of camera above local origin (centre) of target</span></span><br><span class="line">    camera.heightOffset = <span class="number">10</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// The goal rotation of camera around local origin (centre) of target in x y plane</span></span><br><span class="line">    camera.rotationOffset = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//Acceleration of camera in moving from current to goal position</span></span><br><span class="line">    camera.cameraAcceleration = <span class="number">0.005</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//The speed at which acceleration is halted </span></span><br><span class="line">    camera.maxCameraSpeed = <span class="number">10</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//camera.target is set after the target's creation</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// This attaches the camera to the canvas</span></span><br><span class="line">    camera.attachControl(canvas, <span class="literal">false</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**************************************************************/</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// This creates a light, aiming 0,1,0 - to the sky (non-mesh)</span></span><br><span class="line">    <span class="keyword">var</span> light = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">"light"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>), scene);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//Material</span></span><br><span class="line">    <span class="keyword">var</span> mat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"mat1"</span>, scene);</span><br><span class="line">    mat.alpha = <span class="number">1.0</span>;</span><br><span class="line">    mat.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0.5</span>, <span class="number">0.5</span>, <span class="number">1.0</span>);</span><br><span class="line">    <span class="keyword">var</span> texture = <span class="keyword">new</span> BABYLON.Texture(<span class="string">"http://jerome.bousquie.fr/BJS/images/spriteAtlas.png"</span>, scene);</span><br><span class="line">    mat.diffuseTexture = texture;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//Different face for each side of box to show camera rotation</span></span><br><span class="line">    <span class="keyword">var</span> hSpriteNb =  <span class="number">6</span>;  <span class="comment">// 6 sprites per row</span></span><br><span class="line">    <span class="keyword">var</span> vSpriteNb =  <span class="number">4</span>;  <span class="comment">// 4 sprite rows	</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> faceUV = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">6</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">6</span>; i++) &#123;</span><br><span class="line">        faceUV[i] = <span class="keyword">new</span> BABYLON.Vector4(i/hSpriteNb, <span class="number">0</span>, (i+<span class="number">1</span>)/hSpriteNb, <span class="number">1</span> / vSpriteNb);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Shape to follow</span></span><br><span class="line">    <span class="keyword">var</span> box = BABYLON.MeshBuilder.CreateBox(<span class="string">"box"</span>, &#123;<span class="attr">size</span>: <span class="number">2</span>, <span class="attr">faceUV</span>: faceUV &#125;, scene);</span><br><span class="line">    box.position = <span class="keyword">new</span> BABYLON.Vector3(<span class="number">20</span>, <span class="number">0</span>, <span class="number">10</span>);</span><br><span class="line">    box.material = mat;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//create solid particle system of stationery grey boxes to show movement of box and camera</span></span><br><span class="line">    <span class="keyword">var</span> boxesSPS = <span class="keyword">new</span> BABYLON.SolidParticleSystem(<span class="string">"boxes"</span>, scene, &#123;<span class="attr">updatable</span>: <span class="literal">false</span>&#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//function to position of grey boxes</span></span><br><span class="line">    <span class="keyword">var</span> set_boxes = <span class="function"><span class="keyword">function</span>(<span class="params">particle, i, s</span>) </span>&#123;</span><br><span class="line">        particle.position = <span class="keyword">new</span> BABYLON.Vector3(<span class="number">-50</span> + <span class="built_in">Math</span>.random()*<span class="number">100</span>, <span class="number">-50</span> + <span class="built_in">Math</span>.random()*<span class="number">100</span>, <span class="number">-50</span> + <span class="built_in">Math</span>.random()*<span class="number">100</span>); </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//add 400 boxes</span></span><br><span class="line">    boxesSPS.addShape(box, <span class="number">400</span>, &#123;<span class="attr">positionFunction</span>:set_boxes&#125;);  </span><br><span class="line">    <span class="keyword">var</span> boxes = boxesSPS.buildMesh(); <span class="comment">// mesh of boxes</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*****************SET TARGET FOR CAMERA************************/</span> </span><br><span class="line">    camera.lockedTarget = box;</span><br><span class="line">    <span class="comment">/**************************************************************/</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> linex =<span class="keyword">new</span> BABYLON.Mesh.CreateLines(<span class="string">'linex'</span>,[<span class="keyword">new</span> BABYLON.Vector3(<span class="number">-10000</span>,<span class="number">0</span>,<span class="number">0</span>),<span class="keyword">new</span> BABYLON.Vector3(<span class="number">10000</span>,<span class="number">0</span>,<span class="number">0</span>)],scene);</span><br><span class="line">    <span class="keyword">var</span> liney =<span class="keyword">new</span> BABYLON.Mesh.CreateLines(<span class="string">'liney'</span>,[<span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>,<span class="number">-10000</span>,<span class="number">0</span>),<span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>,<span class="number">10000</span>,<span class="number">0</span>)],scene);</span><br><span class="line">    <span class="keyword">var</span> linez =<span class="keyword">new</span> BABYLON.Mesh.CreateLines(<span class="string">'linez'</span>,[<span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>,<span class="number">0</span>,<span class="number">-10000</span>),<span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>,<span class="number">0</span>,<span class="number">10000</span>)],scene);</span><br><span class="line">    </span><br><span class="line">    linex.color=<span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">    liney.color=<span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">    linez.color=<span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//box movement variables</span></span><br><span class="line">    <span class="keyword">var</span> alpha = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">var</span> orbit_radius = <span class="number">20</span></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="comment">//Move the box to see that the camera follows it 	</span></span><br><span class="line">    scene.registerBeforeRender(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    alpha +=<span class="number">0.01</span>;</span><br><span class="line">    box.position.x = orbit_radius*<span class="built_in">Math</span>.cos(alpha);</span><br><span class="line">    box.position.y = orbit_radius*<span class="built_in">Math</span>.sin(alpha);</span><br><span class="line">    box.position.z = <span class="number">10</span>*<span class="built_in">Math</span>.sin(<span class="number">2</span>*alpha);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//change the viewing angle of the camera as it follows the box</span></span><br><span class="line">    camera.rotationOffset = (<span class="number">18</span>*alpha/<span class="number">360</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> scene;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> canvasFollowCamera = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-7-followcamera'</span>)</span><br><span class="line"><span class="keyword">const</span> engineFollowCamera = <span class="keyword">new</span> BABYLON.Engine(canvasFollowCamera,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> sceneFollowCamera = createSceneFollowCamera(engineFollowCamera,canvasFollowCamera) </span><br><span class="line">engineFollowCamera.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;sceneFollowCamera.render()&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<div style="display:flex;flex-direction:column;align-items:center;margin-top:20px;margin-bottom:20px">
+    <canvas id="renderCanvas-7-followcamera" touch-action="none" style="width:400px;height:400px">
+    </canvas>
+</div>
+
+<script>
+    var createSceneFollowCamera = function (engine,canvas) {
+         // This creates a basic Babylon Scene object (non-mesh)
+        var scene = new BABYLON.Scene(engine);
+
+        /********** FOLLOW CAMERA EXAMPLE **************************/
+
+        // This creates and initially positions a follow camera     
+        var camera = new BABYLON.FollowCamera("FollowCam", new BABYLON.Vector3(0, 10, -10), scene);
+
+        //The goal distance of camera from target
+        camera.radius = 30;
+
+        // The goal height of camera above local origin (centre) of target
+        camera.heightOffset = 10;
+
+        // The goal rotation of camera around local origin (centre) of target in x y plane
+        camera.rotationOffset = 0;
+
+        //Acceleration of camera in moving from current to goal position
+        camera.cameraAcceleration = 0.005
+
+        //The speed at which acceleration is halted 
+        camera.maxCameraSpeed = 10
+
+        //camera.target is set after the target's creation
+
+        // This attaches the camera to the canvas
+        camera.attachControl(canvas, false);
+
+        /**************************************************************/
+
+        // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+        var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+        //Material
+        var mat = new BABYLON.StandardMaterial("mat1", scene);
+        mat.alpha = 1.0;
+        mat.diffuseColor = new BABYLON.Color3(0.5, 0.5, 1.0);
+        var texture = new BABYLON.Texture("http://jerome.bousquie.fr/BJS/images/spriteAtlas.png", scene);
+        mat.diffuseTexture = texture;
+
+        //Different face for each side of box to show camera rotation
+        var hSpriteNb =  6;  // 6 sprites per row
+        var vSpriteNb =  4;  // 4 sprite rows    
+
+        var faceUV = new Array(6);
+
+        for (var i = 0; i < 6; i++) {
+            faceUV[i] = new BABYLON.Vector4(i/hSpriteNb, 0, (i+1)/hSpriteNb, 1 / vSpriteNb);
+        }
+
+        // Shape to follow
+        var box = BABYLON.MeshBuilder.CreateBox("box", {size: 2, faceUV: faceUV }, scene);
+        box.position = new BABYLON.Vector3(20, 0, 10);
+        box.material = mat;
+
+        //create solid particle system of stationery grey boxes to show movement of box and camera
+        var boxesSPS = new BABYLON.SolidParticleSystem("boxes", scene, {updatable: false});
+
+        //function to position of grey boxes
+        var set_boxes = function(particle, i, s) {
+            particle.position = new BABYLON.Vector3(-50 + Math.random()*100, -50 + Math.random()*100, -50 + Math.random()*100); 
+        }
+
+        //add 400 boxes
+        boxesSPS.addShape(box, 400, {positionFunction:set_boxes});  
+        var boxes = boxesSPS.buildMesh(); // mesh of boxes
+
+        /*****************SET TARGET FOR CAMERA************************/ 
+        camera.lockedTarget = box;
+        /**************************************************************/
+
+        var linex =new BABYLON.Mesh.CreateLines('linex',[new BABYLON.Vector3(-10000,0,0),new BABYLON.Vector3(10000,0,0)],scene);
+        var liney =new BABYLON.Mesh.CreateLines('liney',[new BABYLON.Vector3(0,-10000,0),new BABYLON.Vector3(0,10000,0)],scene);
+        var linez =new BABYLON.Mesh.CreateLines('linez',[new BABYLON.Vector3(0,0,-10000),new BABYLON.Vector3(0,0,10000)],scene);
+
+        linex.color=new BABYLON.Color3(1,0,0);
+        liney.color=new BABYLON.Color3(0,1,0);
+        linez.color=new BABYLON.Color3(0,0,1);
+
+        //box movement variables
+        var alpha = 0;
+        var orbit_radius = 20
+
+
+        //Move the box to see that the camera follows it     
+        scene.registerBeforeRender(function () {
+        alpha +=0.01;
+        box.position.x = orbit_radius*Math.cos(alpha);
+        box.position.y = orbit_radius*Math.sin(alpha);
+        box.position.z = 10*Math.sin(2*alpha);
+
+        //change the viewing angle of the camera as it follows the box
+        camera.rotationOffset = (18*alpha/360);
+        });
+
+        return scene;
+    }
+    const canvasFollowCamera = document.getElementById('renderCanvas-7-followcamera')
+    const engineFollowCamera = new BABYLON.Engine(canvasFollowCamera,true)
+    const sceneFollowCamera = createSceneFollowCamera(engineFollowCamera,canvasFollowCamera) 
+    engineFollowCamera.runRenderLoop(function(){sceneFollowCamera.render()})
+</script>
+
+<h2 id="立体浮雕相机们-AnaglyphCameras"><a href="#立体浮雕相机们-AnaglyphCameras" class="headerlink" title="立体浮雕相机们 (AnaglyphCameras)"></a>立体浮雕相机们 (AnaglyphCameras)</h2><p>这些相机是通用相机和弧形旋转相机的拓展，它通过后处理过滤技术生成可以使用红蓝3d眼睛观察的渲染效果。</p>
+<p>我们可以通过如下代码生成立体浮雕相机</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> camera1 = <span class="keyword">new</span> BABYLON.AnaglyphUniversalCamera(<span class="string">"af_cam"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">-15</span>), <span class="number">0.033</span>, scene);</span><br><span class="line"><span class="keyword">var</span> camera2 = <span class="keyword">new</span> BABYLON.AnaglyphArcRotateCamera(<span class="string">"aar_cam"</span>, -<span class="built_in">Math</span>.PI/<span class="number">2</span>, <span class="built_in">Math</span>.PI/<span class="number">4</span>, <span class="number">20</span>, <span class="keyword">new</span> BABYLON.Vector3.Zero(), <span class="number">0.033</span>, scene);</span><br></pre></td></tr></table></figure>
+
+<p>与普通的通用相机和弧形旋转相机的区别在于它多了一个参数<code>eyeSpace</code>，在上例中是0.033，意思是左眼视窗与右眼视窗的偏移量。我们直接修改上面的弧形旋转相机为立体浮雕弧形旋转相机，进行观察，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> createSceneAnaglyphArcRotateCamera = <span class="function"><span class="keyword">function</span> (<span class="params">engine,canvas</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// This creates a basic Babylon Scene object (non-mesh)</span></span><br><span class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> BABYLON.Scene(engine);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/********** ARC ROTATE CAMERA EXAMPLE **************************/</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Creates, angles, distances and targets the camera</span></span><br><span class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> BABYLON.AnaglyphArcRotateCamera(<span class="string">"Camera"</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>),<span class="number">0.033</span>, scene);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This positions the camera</span></span><br><span class="line">    camera.setPosition(<span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">-10</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This attaches the camera to the canvas</span></span><br><span class="line">    camera.attachControl(canvas, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**************************************************************/</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// This creates a light, aiming 0,1,0 - to the sky (non-mesh)</span></span><br><span class="line">    <span class="keyword">var</span> light = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">"light"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>), scene);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//Materials</span></span><br><span class="line">    <span class="keyword">var</span> redMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"red"</span>, scene);</span><br><span class="line">    redMat.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    redMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    redMat.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> greenMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"green"</span>, scene);</span><br><span class="line">    greenMat.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    greenMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    greenMat.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> blueMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"blue"</span>, scene);</span><br><span class="line">    blueMat.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    blueMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    blueMat.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Shapes</span></span><br><span class="line">    <span class="keyword">var</span> plane1 = <span class="keyword">new</span> BABYLON.Mesh.CreatePlane(<span class="string">"plane1"</span>, <span class="number">3</span>, scene, <span class="literal">true</span>, BABYLON.Mesh.DOUBLESIDE);</span><br><span class="line">    plane1.position.x = <span class="number">-3</span>;</span><br><span class="line">    plane1.position.z = <span class="number">0</span>;</span><br><span class="line">    plane1.material = redMat;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> plane2 = <span class="keyword">new</span> BABYLON.Mesh.CreatePlane(<span class="string">"plane2"</span>, <span class="number">3</span>, scene, <span class="literal">true</span>, BABYLON.Mesh.DOUBLESIDE);</span><br><span class="line">    plane2.position.x = <span class="number">3</span>;</span><br><span class="line">    plane2.position.z = <span class="number">-1.5</span>;</span><br><span class="line">    plane2.material = greenMat;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> plane3 = <span class="keyword">new</span> BABYLON.Mesh.CreatePlane(<span class="string">"plane3"</span>, <span class="number">3</span>, scene, <span class="literal">true</span>, BABYLON.Mesh.DOUBLESIDE);</span><br><span class="line">    plane3.position.x = <span class="number">3</span>;</span><br><span class="line">    plane3.position.z = <span class="number">1.5</span>;</span><br><span class="line">    plane3.material = blueMat;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> ground = BABYLON.Mesh.CreateGround(<span class="string">"ground1"</span>, <span class="number">10</span>, <span class="number">10</span>, <span class="number">2</span>, scene);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> scene;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> canvasAnaglyphArcRotateCamera = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-7-anaglypharcrotatecamera'</span>)</span><br><span class="line"><span class="keyword">const</span> engineAnaglyphArcRotateCamera = <span class="keyword">new</span> BABYLON.Engine(canvasAnaglyphArcRotateCamera,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> sceneAnaglyphArcRotateCamera = createSceneAnaglyphArcRotateCamera(engineAnaglyphArcRotateCamera,canvasAnaglyphArcRotateCamera) </span><br><span class="line">engineAnaglyphArcRotateCamera.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;sceneAnaglyphArcRotateCamera.render()&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<div style="display:flex;flex-direction:column;align-items:center;margin-top:20px;margin-bottom:20px">
+    <canvas id="renderCanvas-7-anaglypharcrotatecamera" touch-action="none" style="width:400px;height:400px">
+    </canvas>
+</div>
+
+<script>
+    var createSceneAnaglyphArcRotateCamera = function (engine,canvas) {
+        // This creates a basic Babylon Scene object (non-mesh)
+        var scene = new BABYLON.Scene(engine);
+
+        /********** ARC ROTATE CAMERA EXAMPLE **************************/
+
+        // Creates, angles, distances and targets the camera
+        var camera = new BABYLON.AnaglyphArcRotateCamera("Camera", 0, 0, 10, new BABYLON.Vector3(0, 0, 0),0.033, scene);
+
+        // This positions the camera
+        camera.setPosition(new BABYLON.Vector3(0, 0, -10));
+
+        // This attaches the camera to the canvas
+        camera.attachControl(canvas, false);
+
+        /**************************************************************/
+
+        // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+        var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+        //Materials
+        var redMat = new BABYLON.StandardMaterial("red", scene);
+        redMat.diffuseColor = new BABYLON.Color3(1, 0, 0);
+        redMat.emissiveColor = new BABYLON.Color3(1, 0, 0);
+        redMat.specularColor = new BABYLON.Color3(1, 0, 0);
+
+        var greenMat = new BABYLON.StandardMaterial("green", scene);
+        greenMat.diffuseColor = new BABYLON.Color3(0, 1, 0);
+        greenMat.emissiveColor = new BABYLON.Color3(0, 1, 0);
+        greenMat.specularColor = new BABYLON.Color3(0, 1, 0);
+
+        var blueMat = new BABYLON.StandardMaterial("blue", scene);
+        blueMat.diffuseColor = new BABYLON.Color3(0, 0, 1);
+        blueMat.emissiveColor = new BABYLON.Color3(0, 0, 1);
+        blueMat.specularColor = new BABYLON.Color3(0, 0, 1);
+
+        // Shapes
+        var plane1 = new BABYLON.Mesh.CreatePlane("plane1", 3, scene, true, BABYLON.Mesh.DOUBLESIDE);
+        plane1.position.x = -3;
+        plane1.position.z = 0;
+        plane1.material = redMat;
+
+        var plane2 = new BABYLON.Mesh.CreatePlane("plane2", 3, scene, true, BABYLON.Mesh.DOUBLESIDE);
+        plane2.position.x = 3;
+        plane2.position.z = -1.5;
+        plane2.material = greenMat;
+
+        var plane3 = new BABYLON.Mesh.CreatePlane("plane3", 3, scene, true, BABYLON.Mesh.DOUBLESIDE);
+        plane3.position.x = 3;
+        plane3.position.z = 1.5;
+        plane3.material = blueMat;
+
+        var ground = BABYLON.Mesh.CreateGround("ground1", 10, 10, 2, scene);
+
+        return scene;
+    }
+    const canvasAnaglyphArcRotateCamera = document.getElementById('renderCanvas-7-anaglypharcrotatecamera')
+    const engineAnaglyphArcRotateCamera = new BABYLON.Engine(canvasAnaglyphArcRotateCamera,true)
+    const sceneAnaglyphArcRotateCamera = createSceneAnaglyphArcRotateCamera(engineAnaglyphArcRotateCamera,canvasAnaglyphArcRotateCamera) 
+    engineAnaglyphArcRotateCamera.runRenderLoop(function(){sceneAnaglyphArcRotateCamera.render()})
+</script>
+
+<p>拖动鼠标观察，已经产生了效果，带上你的红蓝眼睛试试吧！</p>
+<h2 id="设备方向相机-（Device-Orientation-Camera"><a href="#设备方向相机-（Device-Orientation-Camera" class="headerlink" title="设备方向相机 （Device Orientation Camera)"></a>设备方向相机 （Device Orientation Camera)</h2><p>这个相机是会根据设备的惯导传感器来改变自身的姿态。当转动设备或者移动的时候，相机的姿态会发生变化。</p>
+<p>使用以下方法创建设备方向相机：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> camera = <span class="keyword">new</span> BABYLON.DeviceOrientationCamera(<span class="string">"camera"</span>,position,scene);</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>position</code>表示相机的位置，我们还可以通过<code>camera.setPosition(newPosition)</code>方法重新定义相机位置，也可以使用<code>camera.setTarget(targetPosition)</code>方法设置观察位置。（同通用相机）</p>
+<p>我们还可以设置相机的灵敏度</p>
+<ul>
+<li>camera.angularSensibility number 相机角度变化灵敏度</li>
+<li>camera.moveSensibility number 相机移动灵敏度</li>
+</ul>
+<p>使用Babylon代码创建场景，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> createSceneDeviceOrientationCamera = <span class="function"><span class="keyword">function</span> (<span class="params">engine,canvas</span>) </span>&#123;</span><br><span class="line">     <span class="comment">// This creates a basic Babylon Scene object (non-mesh)</span></span><br><span class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> BABYLON.Scene(engine);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/********** DEVICE ORIENTATION CAMERA EXAMPLE **************************/</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// This creates and positions a device orientation camera 	</span></span><br><span class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> BABYLON.DeviceOrientationCamera(<span class="string">"DevOr_camera"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>), scene);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This targets the camera to scene origin</span></span><br><span class="line">    camera.setTarget(<span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This attaches the camera to the canvas</span></span><br><span class="line">    camera.attachControl(canvas, <span class="literal">false</span>);</span><br><span class="line">    <span class="comment">/**************************************************************/</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// This creates a light, aiming 0,1,0 - to the sky (non-mesh)</span></span><br><span class="line">    <span class="keyword">var</span> light = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">"light"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>), scene);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//Materials</span></span><br><span class="line">    <span class="keyword">var</span> redMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"red"</span>, scene);</span><br><span class="line">    redMat.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    redMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    redMat.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> greenMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"green"</span>, scene);</span><br><span class="line">    greenMat.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    greenMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    greenMat.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> blueMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"blue"</span>, scene);</span><br><span class="line">    blueMat.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    blueMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    blueMat.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> yellowMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"yellow"</span>, scene);</span><br><span class="line">    yellowMat.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    yellowMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    yellowMat.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> orangeMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"orange"</span>, scene);</span><br><span class="line">    orangeMat.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0.5</span>, <span class="number">0</span>);</span><br><span class="line">    orangeMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0.5</span>, <span class="number">0</span>);</span><br><span class="line">    orangeMat.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0.5</span>, <span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> purpleMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"purple"</span>, scene);</span><br><span class="line">    purpleMat.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    purpleMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    purpleMat.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Shapes</span></span><br><span class="line">    <span class="keyword">var</span> box1 = BABYLON.MeshBuilder.CreateBox(<span class="string">"box1"</span>, &#123;<span class="attr">size</span>: <span class="number">5</span>&#125;, scene);</span><br><span class="line">    box1.position = <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>);</span><br><span class="line">    box1.material = redMat;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> box2 = BABYLON.MeshBuilder.CreateBox(<span class="string">"box2"</span>, &#123;<span class="attr">size</span>: <span class="number">5</span>&#125;, scene);</span><br><span class="line">    box2.position = <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">-10</span>);</span><br><span class="line">    box2.material = greenMat;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> box3 = BABYLON.MeshBuilder.CreateBox(<span class="string">"box3"</span>, &#123;<span class="attr">size</span>: <span class="number">5</span>&#125;, scene);</span><br><span class="line">    box3.position = <span class="keyword">new</span> BABYLON.Vector3(<span class="number">10</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    box3.material = blueMat;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> box4 = BABYLON.MeshBuilder.CreateBox(<span class="string">"box4"</span>, &#123;<span class="attr">size</span>: <span class="number">5</span>&#125;, scene);</span><br><span class="line">    box4.position = <span class="keyword">new</span> BABYLON.Vector3(<span class="number">-10</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    box4.material = yellowMat;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> box5 = BABYLON.MeshBuilder.CreateBox(<span class="string">"box5"</span>, &#123;<span class="attr">size</span>: <span class="number">5</span>&#125;, scene);</span><br><span class="line">    box5.position = <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line">    box5.material = orangeMat;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> box6 = BABYLON.MeshBuilder.CreateBox(<span class="string">"box6"</span>, &#123;<span class="attr">size</span>: <span class="number">5</span>&#125;, scene);</span><br><span class="line">    box6.position = <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">-10</span>, <span class="number">0</span>);</span><br><span class="line">    box6.material = purpleMat;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> scene;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> canvasDeviceOrientationCamera = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-7-deviceorientationcamera'</span>)</span><br><span class="line"><span class="keyword">const</span> engineDeviceOrientationCamera = <span class="keyword">new</span> BABYLON.Engine(canvasDeviceOrientationCamera,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> sceneDeviceOrientationCamera = createSceneDeviceOrientationCamera(engineDeviceOrientationCamera,canvasDeviceOrientationCamera) </span><br><span class="line">engineDeviceOrientationCamera.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;sceneDeviceOrientationCamera.render()&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<div style="display:flex;flex-direction:column;align-items:center;margin-top:20px;margin-bottom:20px">
+    <canvas id="renderCanvas-7-deviceorientationcamera" touch-action="none" style="width:400px;height:400px">
+    </canvas>
+</div>
+
+<script>
+    var createSceneDeviceOrientationCamera = function (engine,canvas) {
+         // This creates a basic Babylon Scene object (non-mesh)
+        var scene = new BABYLON.Scene(engine);
+
+        /********** DEVICE ORIENTATION CAMERA EXAMPLE **************************/
+
+        // This creates and positions a device orientation camera     
+        var camera = new BABYLON.DeviceOrientationCamera("DevOr_camera", new BABYLON.Vector3(0, 0, 0), scene);
+
+        // This targets the camera to scene origin
+        camera.setTarget(new BABYLON.Vector3(0, 0, 10));
+
+        // This attaches the camera to the canvas
+        camera.attachControl(canvas, false);
+        /**************************************************************/
+
+        // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+        var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+        //Materials
+        var redMat = new BABYLON.StandardMaterial("red", scene);
+        redMat.diffuseColor = new BABYLON.Color3(1, 0, 0);
+        redMat.emissiveColor = new BABYLON.Color3(1, 0, 0);
+        redMat.specularColor = new BABYLON.Color3(1, 0, 0);
+
+        var greenMat = new BABYLON.StandardMaterial("green", scene);
+        greenMat.diffuseColor = new BABYLON.Color3(0, 1, 0);
+        greenMat.emissiveColor = new BABYLON.Color3(0, 1, 0);
+        greenMat.specularColor = new BABYLON.Color3(0, 1, 0);
+
+        var blueMat = new BABYLON.StandardMaterial("blue", scene);
+        blueMat.diffuseColor = new BABYLON.Color3(0, 0, 1);
+        blueMat.emissiveColor = new BABYLON.Color3(0, 0, 1);
+        blueMat.specularColor = new BABYLON.Color3(0, 0, 1);
+
+        var yellowMat = new BABYLON.StandardMaterial("yellow", scene);
+        yellowMat.diffuseColor = new BABYLON.Color3(1, 1, 0);
+        yellowMat.emissiveColor = new BABYLON.Color3(1, 1, 0);
+        yellowMat.specularColor = new BABYLON.Color3(1, 1, 0);
+
+        var orangeMat = new BABYLON.StandardMaterial("orange", scene);
+        orangeMat.diffuseColor = new BABYLON.Color3(1, 0.5, 0);
+        orangeMat.emissiveColor = new BABYLON.Color3(1, 0.5, 0);
+        orangeMat.specularColor = new BABYLON.Color3(1, 0.5, 0);
+
+        var purpleMat = new BABYLON.StandardMaterial("purple", scene);
+        purpleMat.diffuseColor = new BABYLON.Color3(1, 0, 1);
+        purpleMat.emissiveColor = new BABYLON.Color3(1, 0, 1);
+        purpleMat.specularColor = new BABYLON.Color3(1, 0, 1);
+
+        // Shapes
+        var box1 = BABYLON.MeshBuilder.CreateBox("box1", {size: 5}, scene);
+        box1.position = new BABYLON.Vector3(0, 0, 10);
+        box1.material = redMat;
+
+        var box2 = BABYLON.MeshBuilder.CreateBox("box2", {size: 5}, scene);
+        box2.position = new BABYLON.Vector3(0, 0, -10);
+        box2.material = greenMat;
+
+        var box3 = BABYLON.MeshBuilder.CreateBox("box3", {size: 5}, scene);
+        box3.position = new BABYLON.Vector3(10, 0, 0);
+        box3.material = blueMat;
+
+        var box4 = BABYLON.MeshBuilder.CreateBox("box4", {size: 5}, scene);
+        box4.position = new BABYLON.Vector3(-10, 0, 0);
+        box4.material = yellowMat;
+
+        var box5 = BABYLON.MeshBuilder.CreateBox("box5", {size: 5}, scene);
+        box5.position = new BABYLON.Vector3(0, 10, 0);
+        box5.material = orangeMat;
+
+        var box6 = BABYLON.MeshBuilder.CreateBox("box6", {size: 5}, scene);
+        box6.position = new BABYLON.Vector3(0, -10, 0);
+        box6.material = purpleMat;
+
+        return scene;
+    }
+    const canvasDeviceOrientationCamera = document.getElementById('renderCanvas-7-deviceorientationcamera')
+    const engineDeviceOrientationCamera = new BABYLON.Engine(canvasDeviceOrientationCamera,true)
+    const sceneDeviceOrientationCamera = createSceneDeviceOrientationCamera(engineDeviceOrientationCamera,canvasDeviceOrientationCamera) 
+    engineDeviceOrientationCamera.runRenderLoop(function(){sceneDeviceOrientationCamera.render()})
+</script>
+
+<p>现在移动你的电子设备（手机，平板等），看看效果吧。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>其他相机请参考<a href="https://doc.babylonjs.com/features/cameras" target="_blank" rel="noopener">PowerfulCameraTypes</a>，或接下来的 <em>HowTo</em> 部分。</p>
 
       
     </div>
     <!-- <footer class="article-footer">
-      <a data-url="https://github.com/ZzqiZQute/2019/06/04/Babylon-js-6-材质/" data-id="cjwnlrrsg000kicut1yuah4rz" class="article-share-link">Share</a>
+      <a data-url="https://github.com/ZzqiZQute/2019/06/08/Babylon-js-7-照相机/" data-id="cjwug42z1000rp0ut9qfsri0h" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BabylonJS/">BabylonJS</a></li></ul>
@@ -496,7 +611,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/2/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/4/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/2/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/4/">下一页 &raquo;</a>
   </nav>
 
 </section>
@@ -510,7 +625,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BabylonJS/">BabylonJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Blender/">Blender</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Webpack/">Webpack</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/BabylonJS/">BabylonJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Blender/">Blender</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Webpack/">Webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel/">babel</a></li></ul>
     </div>
   </div>
 
@@ -533,6 +648,14 @@
       <ul>
         
           <li>
+            <a href="/2019/06/13/Babylon-js-8-光照/">Babylon.js-8 光照</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/12/配置Babel以便使用es6编写Node代码/">配置Babel以便使用es6编写Node代码</a>
+          </li>
+        
+          <li>
             <a href="/2019/06/08/Babylon-js-7-照相机/">Babylon.js-7 照相机</a>
           </li>
         
@@ -542,14 +665,6 @@
         
           <li>
             <a href="/2019/06/04/Babylon-js-6-材质/">Babylon.js-6 材质</a>
-          </li>
-        
-          <li>
-            <a href="/2019/06/03/Blender-1/">Blender 1</a>
-          </li>
-        
-          <li>
-            <a href="/2019/06/03/Babylon-js-5-位置，旋转与缩放/">Babylon.js-5 位置，旋转与缩放</a>
           </li>
         
       </ul>
