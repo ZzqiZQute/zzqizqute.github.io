@@ -102,7 +102,7 @@
 <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
 
 <p>参考链接：<a href="https://doc.babylonjs.com/babylon101/animations" target="_blank" rel="noopener">https://doc.babylonjs.com/babylon101/animations</a></p>
-<h1 id="基本动画"><a href="#基本动画" class="headerlink" title="基本动画"></a>基本动画</h1><p>Babylon.js中，动画是一个类<code>BABYLON.Animation</code>。我们可以使用如下代码构建一个动画对象：</p>
+<h2 id="基本动画"><a href="#基本动画" class="headerlink" title="基本动画"></a>基本动画</h2><p>Babylon.js中，动画是一个类<code>BABYLON.Animation</code>。我们可以使用如下代码构建一个动画对象：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> animation = <span class="keyword">new</span> BABYLON.Animation(name,targetProperty,framePerSecond,dataType,loopMode,enableBlending)</span><br></pre></td></tr></table></figure>
 
 <p>其中：</p>
@@ -135,7 +135,7 @@
 <p>接下来有两个重要步骤：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//为动画设置关键帧</span></span><br><span class="line">animation.setKeys(keys);</span><br><span class="line"><span class="comment">//设置动画到target上</span></span><br><span class="line">target.animations=[animation];</span><br></pre></td></tr></table></figure>
 
-<p>最后，使用scene的beginAnimation方法来播放动画：</p>
+<p>最后，使用scene的<code>beginAnimation</code>方法来播放动画：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scene.beginAnimation(target,<span class="keyword">from</span>,to,loop,speedRatio,onAnimationEnd,animatable,stopCurrent);</span><br></pre></td></tr></table></figure>
 
 <p>其中：</p>
@@ -182,11 +182,46 @@
 </script>
 
 <p>看，它转起来了。</p>
+<h2 id="Promises"><a href="#Promises" class="headerlink" title="Promises"></a>Promises</h2><p>Babylon.js的<code>3.3</code>版本之后，可以使用<code>Promise</code>来等待动画结束，使用动画的<code>waitAsync</code>方法。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> anim = scene.beginAnimation(box1, <span class="number">0</span>, <span class="number">100</span>, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"before"</span>);</span><br><span class="line"><span class="keyword">await</span> anim.waitAsync();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"after"</span>);</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://www.babylonjs-playground.com/#HZBCXR" target="_blank" rel="noopener">Babylon示例（请开启控制台查看）</a></p>
+<h2 id="控制动画"><a href="#控制动画" class="headerlink" title="控制动画"></a>控制动画</h2><p>每个动画都有一个属性<code>currentFrame</code>表示当前帧。<br>对于关键帧动画，我们还可以定义插值函数，例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">BABYLON.Animation.prototype.floatInterpolateFunction = <span class="function"><span class="keyword">function</span> (<span class="params">startValue, endValue, gradient</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> startValue + (endValue - startValue) * gradient;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">BABYLON.Animation.prototype.quaternionInterpolateFunction = <span class="function"><span class="keyword">function</span> (<span class="params">startValue, endValue, gradient</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> BABYLON.Quaternion.Slerp(startValue, endValue, gradient);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">BABYLON.Animation.prototype.vector3InterpolateFunction = <span class="function"><span class="keyword">function</span> (<span class="params">startValue, endValue, gradient</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> BABYLON.Vector3.Lerp(startValue, endValue, gradient);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>能够使用的插值函数有以下几个：</p>
+<ul>
+<li>floatInterpolateFunction</li>
+<li>quaternionInterpolateFunction</li>
+<li>quaternionInterpolateFunctionWithTangents</li>
+<li>vector3InterpolateFunction</li>
+<li>vector3InterpolateFunctionWithTangents</li>
+<li>vector2InterpolateFunction</li>
+<li>vector2InterpolateFunctionWithTangents</li>
+<li>sizeInterpolateFunction</li>
+<li>color3InterpolateFunction</li>
+<li>matrixInterpolateFunction</li>
+</ul>
+<h2 id="帮助函数"><a href="#帮助函数" class="headerlink" title="帮助函数"></a>帮助函数</h2><p>可以使用如下函数快速生成一个动画：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Animation.CreateAndStartAnimation = <span class="function"><span class="keyword">function</span>(<span class="params">name, mesh, targetProperty, framePerSecond, totalFrame, from, to, loopMode</span>);</span></span><br></pre></td></tr></table></figure>
+
+<p>要注意的是：</p>
+<ul>
+<li>该动画会根据总帧数以及起始结束的值进行插值</li>
+<li>该动画只在<code>AbstractMesh</code>上作用</li>
+<li>该动画自创建之时立即执行</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BABYLON.Animation.CreateAndStartAnimation(<span class="string">'boxscale'</span>, box1, <span class="string">'scaling.x'</span>, <span class="number">30</span>, <span class="number">120</span>, <span class="number">1.0</span>, <span class="number">1.5</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这使得一个立方体的x轴以每秒钟30帧的速度在4秒钟之内缩放倍数由1变为1.5。</p>
+<h2 id="动画混合"><a href="#动画混合" class="headerlink" title="动画混合"></a>动画混合</h2><p>设置动画的<code>enableBlending</code>为<code>true</code>即可开启混合动画，同时设置<code>blendingSpeed</code>设置动画的混合速度。</p>
+<h2 id="动画权重"><a href="#动画权重" class="headerlink" title="动画权重"></a>动画权重</h2><p>从Babylon.js的<code>3.2</code>版本起，可以使用动画的权重。</p>
 
       
     </div>
     <!-- <footer class="article-footer">
-      <a data-url="https://github.com/ZzqiZQute/2019/06/15/Babylon-js-9-动画/" data-id="cjwxbjvwe000860utipox4lp8" class="article-share-link">Share</a>
+      <a data-url="https://github.com/ZzqiZQute/2019/06/15/Babylon-js-9-动画/" data-id="cjwxnyvjs0004egutpkt5428v" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BabylonJS/">BabylonJS</a></li></ul>
