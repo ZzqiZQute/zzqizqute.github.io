@@ -298,13 +298,15 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> physEngine = <span class="keyword">new</span> BABYLON.CannonJSPlugin(<span class="literal">false</span>);<span class="comment">//_useDeltaForWorldStep</span></span><br><span class="line">newScene.enablePhysics(<span class="keyword">this</span>.gravity, physEngine);</span><br><span class="line">physEngine.setTimeStep(<span class="number">1</span>/<span class="number">60</span>);</span><br></pre></td></tr></table></figure>
 
 <p>这将使得物理引擎以60Hz（0.0166667s）的速度来进行物理计算。</p>
-<p>注意：在使用<code>CannonJSPlugin</code>时，为禁止CannonJS内部累积器使能，需要设置<code>_useDeltaForWorldStep</code>为<code>false</code></p>
+<div style="background-color:#F8F8F8;border-left:red 5px solid;padding:30px;margin-top:20px;margin-bottom:20px">注意：在使用<code>CannonJSPlugin</code>时，为禁止CannonJS内部累积器使能，需要设置<code>_useDeltaForWorldStep</code>为<code>false</code></div>
+
+
 <p>使用以下代码进行逻辑代码与动画帧的同步处理：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">newScene.onBeforeStepObservable.add(<span class="function"><span class="keyword">function</span>(<span class="params">theScene</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"Performing game logic, BEFORE animations and physics for stepId: "</span>+theScene.getStepId());</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">newScene.onAfterStepObservable.add(<span class="function"><span class="keyword">function</span>(<span class="params">theScene</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"Performing game logic, AFTER animations and physics for stepId: "</span>+theScene.getStepId());</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
       
     </div>
     <!-- <footer class="article-footer">
-      <a data-url="https://github.com/ZzqiZQute/2019/06/15/Babylon-js-9-动画/" data-id="cjx04j66m000jkkutvrtx6at2" class="article-share-link">Share</a>
+      <a data-url="https://github.com/ZzqiZQute/2019/06/15/Babylon-js-9-动画/" data-id="cjx04l2sj000j7gut3x1gsdym" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BabylonJS/">BabylonJS</a></li></ul>
