@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="我带你们打">
 <meta property="og:description" content="参考链接：https://doc.babylonjs.com/babylon101/animations 基本动画Babylon.js中，动画是一个类BABYLON.Animation。我们可以使用如下代码构建一个动画对象： 1var animation = new BABYLON.Animation(name,targetProperty,framePerSecond,dataTy">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-06-17T08:32:53.556Z">
+<meta property="og:updated_time" content="2019-06-17T08:35:07.051Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Babylon.js-9 动画">
 <meta name="twitter:description" content="参考链接：https://doc.babylonjs.com/babylon101/animations 基本动画Babylon.js中，动画是一个类BABYLON.Animation。我们可以使用如下代码构建一个动画对象： 1var animation = new BABYLON.Animation(name,targetProperty,framePerSecond,dataTy">
@@ -295,7 +295,7 @@
 <li>once boolean 是否之调用一次(默认为<code>false</code>)</li>
 </ul>
 <h2 id="确定性锁步-（帧同步）"><a href="#确定性锁步-（帧同步）" class="headerlink" title="确定性锁步 （帧同步）"></a>确定性锁步 （帧同步）</h2><p>为了使动画以及物理引擎，游戏逻辑，或者多平台多用户客户端同步，可以开启引擎的确定性同步。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> engine = <span class="keyword">new</span> BABYLON.Engine(renderCanvas,<span class="literal">true</span>,&#123;</span><br><span class="line">    deterministicLockstep:<span class="literal">true</span>,</span><br><span class="line">    lockstepMaxSteps：<span class="number">4</span></span><br><span class="line">&#125;antiAliasing)</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> engine = <span class="keyword">new</span> BABYLON.Engine(renderCanvas,<span class="literal">true</span>,&#123;</span><br><span class="line">    deterministicLockstep:<span class="literal">true</span>,</span><br><span class="line">    lockstepMaxSteps：<span class="number">4</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 
 <p>这样场景将渲染离散物理引擎和动画帧，例如使用<code>Cannon</code>物理引擎：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> physEngine = <span class="keyword">new</span> BABYLON.CannonJSPlugin(<span class="literal">false</span>);<span class="comment">//_useDeltaForWorldStep</span></span><br><span class="line">newScene.enablePhysics(<span class="keyword">this</span>.gravity, physEngine);</span><br><span class="line">physEngine.setTimeStep(<span class="number">1</span>/<span class="number">60</span>);</span><br></pre></td></tr></table></figure>
@@ -307,7 +307,7 @@
       
     </div>
     <!-- <footer class="article-footer">
-      <a data-url="https://github.com/ZzqiZQute/2019/06/15/Babylon-js-9-动画/" data-id="cjx04h7mw000jkout9wxo5daz" class="article-share-link">Share</a>
+      <a data-url="https://github.com/ZzqiZQute/2019/06/15/Babylon-js-9-动画/" data-id="cjx04it4t000jesutqcvcrsb9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BabylonJS/">BabylonJS</a></li></ul>
