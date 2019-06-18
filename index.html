@@ -131,26 +131,26 @@ if (isMathjaxConfig === false) { // 如果：没有配置MathJax
 <p>参考链接：<a href="https://blog.csdn.net/chengde6896383/article/details/76474358" target="_blank" rel="noopener">https://blog.csdn.net/chengde6896383/article/details/76474358</a></p>
 <h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><p>已知条件：</p>
 <ul>
-<li>三个锚节点（Anchor，A）的坐标<code>(x<sub>1</sub>,y<sub>1</sub>)</code>,<code>(x<sub>2</sub>,y<sub>2</sub>)</code>,<code>(x<sub>3</sub>,y<sub>3</sub>)</code></li>
-<li>标签节点(Tag，T)到达三个A节点的距离分别为<code>d<sub>1</sub></code>,<code>d<sub>2</sub></code>,<code>d<sub>3</sub></code></li>
+<li>三个锚节点（Anchor，A）的坐标<code>(x<sub>1</sub>,y<sub>1</sub>,z<sub>1</sub>)</code>,<code>(x<sub>2</sub>,y<sub>2</sub>,z<sub>2</sub>)</code>,<code>(x<sub>3</sub>,y<sub>3</sub>,z<sub>3</sub>)</code></li>
+<li>标签节点(Tag，T)到达三个A节点的距离分别为<code>r<sub>1</sub></code>,<code>r<sub>2</sub></code>,<code>r<sub>3</sub></code></li>
 </ul>
-<p>求解标签的坐标<code>(x,y)</code></p>
+<p>求解标签节点的坐标<code>(x,y,z)</code>。</p>
 <p>根据勾股定理，可以计算得到T节点的位置：</p>
-<p>$$ (x_{1}-x)^2+(y_{1}-y)=d_{1}^2 $$<br>$$ (x_{2}-x)^2+(y_{2}-y)=d_{2}^2 $$<br>$$ (x_{3}-x)^2+(y_{3}-y)=d_{3}^2 $$</p>
-<p>首先设：A<sub>1</sub>的坐标为<code>(0,0)</code>，A<sub>2</sub>的纵坐标与A<sub>1</sub>相同，坐标为<code>(d,0)</code>，A<sub>3</sub>的坐标为<code>(i,j)</code>，三个球形的半径（到T节点的距离）分别为<code>r1</code>,<code>r2</code>,<code>r3</code>，<code>z</code>为T节点到A节点构成的平面的距离，则有：</p>
+<p>$$ (x_{1}-x)^2+(y_{1}-y)^2+(z_{1}-z)^2=d_{1}^2 $$<br>$$ (x_{2}-x)^2+(y_{2}-y)^2+(z_{2}-z)^2=d_{2}^2 $$<br>$$ (x_{3}-x)^2+(y_{3}-y)^2+(z_{3}-z)^2=d_{3}^2 $$</p>
+<p>首先设：A<sub>1</sub>的坐标为<code>(0,0,0)</code>，A<sub>2</sub>的y坐标与A<sub>1</sub>相同，坐标为<code>(d,0,0)</code>，A<sub>3</sub>的坐标为<code>(i,j,0)</code>，三个球形的半径（到T节点的距离）分别为<code>r1</code>,<code>r2</code>,<code>r3</code>，<code>z</code>为T节点到A节点构成的平面的距离，则有：</p>
 <p>$$ x^2+y^2+z^2=r_{1}^2\quad① $$<br>$$ (x-d)^2+y^2+z^2=r_{2}^2\quad② $$<br>$$ (x-i)^2+(y-j)^2+z^2=r_{3}^2\quad③ $$</p>
-<p>由①-②得：</p>
+<p>由①-②求得 <span style="color:red"><b>x</b></span> ：</p>
 <p>$$ x = (r_{1}^2-r_{2}^2+d^2)/(2*d)\quad④ $$</p>
-<p>由②-③并将④带入求得：</p>
+<p>由②-③并将④带入求得 <span style="color:green"><b>y</b></span> ：</p>
 <p>$$ y = (r_{1}^2-r_{3}^2-x^2+(x-i)^2+j^2)/(2*j)\quad⑤ $$</p>
-<p>然后由①④⑤得：</p>
+<p>然后由①④⑤求得 <span style="color:blue"><b>z</b></span> ：</p>
 <p>$$ z = \sqrt{r_{1}^2-x^2-y^2}\quad⑥ $$</p>
 <p>完毕。</p>
 <div style="background-color:#F8F8F8;border-left:red 5px solid;padding:30px;margin-top:20px;margin-bottom:20px">注意：这种方法需要三个A节点在同一水平面上，并且无法区分z是在水平面上面或者下面。</div>
       
     </div>
     <!-- <footer class="article-footer">
-      <a data-url="https://github.com/ZzqiZQute/2019/06/18/三边测量（Trilateration）定位方法/" data-id="cjx1jlesj0008z0utuyjcktp2" class="article-share-link">Share</a>
+      <a data-url="https://github.com/ZzqiZQute/2019/06/18/三边测量（Trilateration）定位方法/" data-id="cjx1jxzb3000820uth5r2o454" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Algorithms/">Algorithms</a></li></ul>
