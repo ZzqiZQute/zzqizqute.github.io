@@ -74,10 +74,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-Blender-1" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Babylon-js-6-材质" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/06/03/Blender-1/" class="article-date">
-  <time datetime="2019-06-03T13:31:40.000Z" itemprop="datePublished">2019-06-03</time>
+    <a href="/2019/06/04/Babylon-js-6-材质/" class="article-date">
+  <time datetime="2019-06-04T06:51:06.000Z" itemprop="datePublished">2019-06-04</time>
 </a>
     
   </div>
@@ -88,7 +88,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/03/Blender-1/">Blender 1</a>
+      <a class="article-title" href="/2019/06/04/Babylon-js-6-材质/">Babylon.js-6 材质</a>
     </h1>
   
 
@@ -96,24 +96,394 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <img src="/2019/06/03/Blender-1/blender-logo.png" title="blender-logo">
+        <script src="https://cdn.bootcss.com/babylonjs/4.1.0-alpha.1/babylon.js"></script>
+<script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script> <!-- babylon.js加载器 (OBJ, STL, glTF)-->
+<script src="https://code.jquery.com/pep/0.4.3/pep.js"></script> <!-- Pointer Event Polyfill 便携设备触碰事件处理 -->
+<script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
 
+<p>参考链接：<a href="https://doc.babylonjs.com/babylon101/materials" target="_blank" rel="noopener">https://doc.babylonjs.com/babylon101/materials</a></p>
+<p>我们可以在将材质附着在网格上实现渲染，可以设置颜色以及纹理。一个材质对象可以附着在多个网格上。</p>
+<h1 id="对光的反应"><a href="#对光的反应" class="headerlink" title="对光的反应"></a>对光的反应</h1><p>一个材质对象对光的反应取决于以下几项：</p>
+<ol>
+<li>漫反射 散射（Diffuse）在光的照射下的材质的基本颜色或纹理</li>
+<li>镜面反射（Specular） 高亮照射下材质的颜色或纹理</li>
+<li>放射（Emissive）材质自身发射的颜色或纹理</li>
+<li>环境（Ambient）由环境照亮时材质的颜色或纹理</li>
+</ol>
+<p>漫反射和镜面反射需要创建一个光源。环境颜色需要场景的环境颜色设置，给出一个环境背景光。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scene.ambientColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>透明度 - 对于具有透明部分的图像，可以使用它以使材料的适当部分不可见。 这需要设置alpha属性。</p>
+<h2 id="颜色-（Color）"><a href="#颜色-（Color）" class="headerlink" title="颜色 （Color）"></a>颜色 （Color）</h2><p>使用以下代码创建一个标准材质<code>StandardMaterial</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myMaterial = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"myMaterial"</span>, scene)</span><br></pre></td></tr></table></figure>
+
+<p>我们可以设置<code>myMaterial</code>的属性，对于颜色有以下属性</p>
 <ul>
-<li>Blender 是一款开源的跨平台全能三维动画制作软件，提供从建模、动画、材质、渲染、到音频处理、视频剪辑等一系列动画短片制作解决方案。</li>
-<li>Blender 拥有方便在不同工作下使用的多种用户界面，内置绿屏抠像、摄像机反向跟踪、遮罩处理、后期结点合成等高级影视解决方案。同时还内置有卡通描边（FreeStyle）和基于 GPU 技术 Cycles 渲染器。以 Python 为内建脚本，支持多种第三方渲染器。</li>
-<li>Blender 为全世界的媒体工作者和艺术家而设计，可以被用来进行 3D 可视化，同时也可以创作广播和电影级品质的视频，另外内置的实时 3D 游戏引擎，让制作独立回放的 3D 互动内容成为可能。</li>
-<li>有了 Blender 后，喜欢 3D 绘图的玩家们不用花大钱，也可以制作出自己喜爱的 3D 模型了。它不仅支持各种多边形建模，也能做出动画！</li>
+<li>diffuseColor</li>
+<li>specularColor</li>
+<li>emissiveColor</li>
+<li>ambientColor</li>
 </ul>
-<p>以上内容来源百度百科<a href="https://baike.baidu.com/item/Blender/222123?fr=aladdin" target="_blank" rel="noopener">Blender词条</a></p>
-<p>视频教程<a href="https://www.bilibili.com/video/av24292767" target="_blank" rel="noopener">B站顺子老师的Blender教程</a></p>
+<div style="background-color:#F8F8F8;border-left:red 5px solid;padding:30px;margin-bottom:20px">对于环境光颜色<code>ambientColor</code>，我们需要设置场景的环境光颜色才能够生效。</div>
+
+<p>使用方法如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myMaterial = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"myMaterial"</span>, scene)</span><br><span class="line"></span><br><span class="line">myMaterial.diffuseColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">myMaterial.specularColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0.5</span>, <span class="number">0.6</span>, <span class="number">0.87</span>)</span><br><span class="line">myMaterial.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">myMaterial.ambientColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0.23</span>, <span class="number">0.98</span>, <span class="number">0.53</span>)</span><br><span class="line"></span><br><span class="line">mesh.material = myMaterial</span><br></pre></td></tr></table></figure>
+
+<p>我们创建一个场景来说明材质的颜色，我们使用BABYLON提供的创建场景方法创建了一个场景，同时对其进行修改。我们使用一个平行光<code>HemisphericLight</code>来观察确认材质的颜色。我们调整平行光的强度，但不超过最强强度的一半（防止看不到聚光灯照射的效果），观察光在材质上的渲染效果（这里使用了Babylon的<a href="https://preview.babylonjs.com/gui/babylon.gui.min.js" target="_blank" rel="noopener">GUI</a>）：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> createSceneColor = <span class="function"><span class="keyword">function</span> (<span class="params">engine,canvas</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> BABYLON.Scene(engine)</span><br><span class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> BABYLON.ArcRotateCamera(<span class="string">"Camera"</span>, -<span class="built_in">Math</span>.PI / <span class="number">2</span>, <span class="built_in">Math</span>.PI / <span class="number">3</span>, <span class="number">10</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">-1</span>,<span class="number">0</span>,<span class="number">0</span>), scene)</span><br><span class="line">    camera.attachControl(canvas, <span class="literal">false</span>)</span><br><span class="line">    <span class="keyword">var</span> mats = [</span><br><span class="line">        <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>),</span><br><span class="line">        <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>),</span><br><span class="line">        <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>),</span><br><span class="line">        <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">var</span> redMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"redMat"</span>, scene)</span><br><span class="line">    redMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">var</span> greenMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"greenMat"</span>, scene)</span><br><span class="line">    greenMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">var</span> blueMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"blueMat"</span>, scene)</span><br><span class="line">    blueMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">var</span> whiteMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"whiteMat"</span>, scene)</span><br><span class="line">    whiteMat.emissiveColor = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">var</span> hemisphericLight = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">'hemisphericLight'</span>,<span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>),scene)</span><br><span class="line">    hemisphericLight.intensity=<span class="number">0</span></span><br><span class="line">    <span class="keyword">var</span> direction = <span class="number">1</span></span><br><span class="line">    <span class="keyword">const</span> anime=<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">        hemisphericLight.intensity+=direction*<span class="number">0.005</span></span><br><span class="line">        <span class="keyword">if</span>(hemisphericLight.intensity&gt;=<span class="number">0.5</span>)</span><br><span class="line">            direction =<span class="number">-1</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(hemisphericLight.intensity&lt;=<span class="number">0</span>)</span><br><span class="line">            direction = <span class="number">1</span></span><br><span class="line">        requestAnimationFrame(anime)</span><br><span class="line">    &#125;</span><br><span class="line">    anime()</span><br><span class="line">    <span class="comment">//red light</span></span><br><span class="line">    <span class="keyword">var</span> lightRed = <span class="keyword">new</span> BABYLON.SpotLight(<span class="string">"spotLight"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">-0.9</span>, <span class="number">1</span> , <span class="number">-1.8</span>), <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>), <span class="built_in">Math</span>.PI / <span class="number">2</span>, <span class="number">1.5</span>, scene)</span><br><span class="line">    lightRed.diffuse = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">    lightRed.specular = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="comment">//green light</span></span><br><span class="line">    <span class="keyword">var</span> lightGreen = <span class="keyword">new</span> BABYLON.SpotLight(<span class="string">"spotLight1"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">-0.5</span>), <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>), <span class="built_in">Math</span>.PI / <span class="number">2</span>, <span class="number">1.5</span>, scene)</span><br><span class="line">    lightGreen.diffuse = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line">    lightGreen.specular = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="comment">//blue light</span></span><br><span class="line">    <span class="keyword">var</span> lightBlue = <span class="keyword">new</span> BABYLON.SpotLight(<span class="string">"spotLight2"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0.9</span>, <span class="number">1</span>, <span class="number">-1.8</span>), <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>), <span class="built_in">Math</span>.PI / <span class="number">2</span>, <span class="number">1.5</span>, scene)</span><br><span class="line">    lightBlue.diffuse = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">    lightBlue.specular = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="comment">//white light</span></span><br><span class="line">    <span class="keyword">var</span> lightWhite = <span class="keyword">new</span> BABYLON.SpotLight(<span class="string">"spotLight3"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>), <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>), <span class="built_in">Math</span>.PI / <span class="number">2</span>, <span class="number">1.5</span>, scene)</span><br><span class="line">    lightWhite.diffuse = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">    lightWhite.specular = <span class="keyword">new</span> BABYLON.Color3(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">var</span> redSphere = BABYLON.MeshBuilder.CreateSphere(<span class="string">"sphere"</span>, &#123;<span class="attr">diameter</span>: <span class="number">0.25</span>&#125;, scene)</span><br><span class="line">    redSphere.material = redMat</span><br><span class="line">    redSphere.position = lightRed.position</span><br><span class="line">    <span class="keyword">var</span> greenSphere = BABYLON.MeshBuilder.CreateSphere(<span class="string">"sphere"</span>, &#123;<span class="attr">diameter</span>: <span class="number">0.25</span>&#125;, scene)</span><br><span class="line">    greenSphere.material = greenMat</span><br><span class="line">    greenSphere.position = lightGreen.position</span><br><span class="line">    <span class="keyword">var</span> blueSphere = BABYLON.MeshBuilder.CreateSphere(<span class="string">"sphere"</span>, &#123;<span class="attr">diameter</span>: <span class="number">0.25</span>&#125;, scene)</span><br><span class="line">    blueSphere.material = blueMat</span><br><span class="line">    blueSphere.position = lightBlue.position</span><br><span class="line">    <span class="keyword">var</span> whiteSphere = BABYLON.MeshBuilder.CreateSphere(<span class="string">"sphere"</span>, &#123;<span class="attr">diameter</span>: <span class="number">0.25</span>&#125;, scene)</span><br><span class="line">    whiteSphere.material = whiteMat</span><br><span class="line">    whiteSphere.position = lightWhite.position</span><br><span class="line">    <span class="keyword">var</span> groundMat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"groundMat"</span>, scene)</span><br><span class="line">    groundMat.diffuseColor = mats[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">var</span> ground = BABYLON.MeshBuilder.CreateGround(<span class="string">"ground"</span>, &#123;<span class="attr">width</span>: <span class="number">4</span>, <span class="attr">height</span>: <span class="number">6</span>&#125;, scene)	</span><br><span class="line">    ground.material = groundMat</span><br><span class="line">    <span class="comment">/*******************GUI***********************/</span></span><br><span class="line">    <span class="keyword">var</span> makeYellow = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        groundMat.diffuseColor = mats[<span class="number">0</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> makePurple = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        groundMat.diffuseColor = mats[<span class="number">1</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> makeCyan = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        groundMat.diffuseColor = mats[<span class="number">2</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> makeWhite = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        groundMat.diffuseColor = mats[<span class="number">3</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> matGroup = <span class="keyword">new</span> BABYLON.GUI.RadioGroup(<span class="string">"Material Color"</span>, <span class="string">"radio"</span>)    </span><br><span class="line">    matGroup.addRadio(<span class="string">"Yellow"</span>, makeYellow, <span class="literal">true</span>)</span><br><span class="line">    matGroup.addRadio(<span class="string">"Purple"</span>, makePurple)</span><br><span class="line">    matGroup.addRadio(<span class="string">"Cyan"</span>, makeCyan)</span><br><span class="line">    matGroup.addRadio(<span class="string">"White"</span>, makeWhite)</span><br><span class="line">    <span class="keyword">var</span> advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI(<span class="string">"UI"</span>)</span><br><span class="line">    <span class="keyword">var</span> selectBox = <span class="keyword">new</span> BABYLON.GUI.SelectionPanel(<span class="string">"sp"</span>, [matGroup])</span><br><span class="line">    selectBox.width = <span class="number">0.4</span></span><br><span class="line">    selectBox.height = <span class="string">"50%"</span></span><br><span class="line">    selectBox.top = <span class="string">"4px"</span></span><br><span class="line">    selectBox.left = <span class="string">"4px"</span></span><br><span class="line">    selectBox.background = <span class="string">"white"</span></span><br><span class="line">    selectBox.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT</span><br><span class="line">    selectBox.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP</span><br><span class="line">    advancedTexture.addControl(selectBox)            </span><br><span class="line">    <span class="keyword">return</span> scene</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> canvasColor = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-6-color'</span>)</span><br><span class="line"><span class="keyword">const</span> engineColor = <span class="keyword">new</span> BABYLON.Engine(canvasColor,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> sceneColor=createSceneColor(engineColor,canvasColor) </span><br><span class="line">engineColor.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;sceneColor.render()&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<div style="display:flex;justify-content:center;margin-top:20px;margin-bottom:20px">
+    <canvas id="renderCanvas-6-color" touch-action="none" style="width:400px;height:400px">
+    </canvas>
+</div>
+
+<script>
+    var createSceneColor = function (engine,canvas) {
+        var scene = new BABYLON.Scene(engine)
+        var camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2, Math.PI / 3, 10, new BABYLON.Vector3(-1,0,0), scene)
+        camera.attachControl(canvas, false)
+        var mats = [
+            new BABYLON.Color3(1, 1, 0),
+            new BABYLON.Color3(1, 0, 1),
+            new BABYLON.Color3(0, 1, 1),
+            new BABYLON.Color3(1, 1, 1)
+        ]
+        var redMat = new BABYLON.StandardMaterial("redMat", scene)
+        redMat.emissiveColor = new BABYLON.Color3(1, 0, 0)
+        var greenMat = new BABYLON.StandardMaterial("greenMat", scene)
+        greenMat.emissiveColor = new BABYLON.Color3(0, 1, 0)
+        var blueMat = new BABYLON.StandardMaterial("blueMat", scene)
+        blueMat.emissiveColor = new BABYLON.Color3(0, 0, 1)
+        var whiteMat = new BABYLON.StandardMaterial("whiteMat", scene)
+        whiteMat.emissiveColor = new BABYLON.Color3(1, 1, 1)
+        var hemisphericLight = new BABYLON.HemisphericLight('hemisphericLight',new BABYLON.Vector3(0,1,0),scene)
+        hemisphericLight.intensity=0
+        var direction = 1
+        const anime=()=>{
+            hemisphericLight.intensity+=direction*0.005
+            if(hemisphericLight.intensity>=0.5)
+                direction =-1
+            else if(hemisphericLight.intensity<=0)
+                direction = 1
+            requestAnimationFrame(anime)
+        }
+        anime()
+        //red light
+        var lightRed = new BABYLON.SpotLight("spotLight", new BABYLON.Vector3(-0.9, 1 , -1.8), new BABYLON.Vector3(0, -1, 0), Math.PI / 2, 1.5, scene)
+        lightRed.diffuse = new BABYLON.Color3(1, 0, 0)
+        lightRed.specular = new BABYLON.Color3(0, 0, 0)
+        //green light
+        var lightGreen = new BABYLON.SpotLight("spotLight1", new BABYLON.Vector3(0, 1, -0.5), new BABYLON.Vector3(0, -1, 0), Math.PI / 2, 1.5, scene)
+        lightGreen.diffuse = new BABYLON.Color3(0, 1, 0)
+        lightGreen.specular = new BABYLON.Color3(0, 0, 0)
+        //blue light
+        var lightBlue = new BABYLON.SpotLight("spotLight2", new BABYLON.Vector3(0.9, 1, -1.8), new BABYLON.Vector3(0, -1, 0), Math.PI / 2, 1.5, scene)
+        lightBlue.diffuse = new BABYLON.Color3(0, 0, 1)
+        lightBlue.specular = new BABYLON.Color3(0, 0, 0)
+        //white light
+        var lightWhite = new BABYLON.SpotLight("spotLight3", new BABYLON.Vector3(0, 1, 1), new BABYLON.Vector3(0, -1, 0), Math.PI / 2, 1.5, scene)
+        lightWhite.diffuse = new BABYLON.Color3(1, 1, 1)
+        lightWhite.specular = new BABYLON.Color3(0, 0, 0)
+        var redSphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 0.25}, scene)
+        redSphere.material = redMat
+        redSphere.position = lightRed.position
+        var greenSphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 0.25}, scene)
+        greenSphere.material = greenMat
+        greenSphere.position = lightGreen.position
+        var blueSphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 0.25}, scene)
+        blueSphere.material = blueMat
+        blueSphere.position = lightBlue.position
+        var whiteSphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 0.25}, scene)
+        whiteSphere.material = whiteMat
+        whiteSphere.position = lightWhite.position
+        var groundMat = new BABYLON.StandardMaterial("groundMat", scene)
+        groundMat.diffuseColor = mats[0]
+        var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 4, height: 6}, scene)    
+        ground.material = groundMat
+        /*******************GUI***********************/
+        var makeYellow = function() {
+            groundMat.diffuseColor = mats[0]
+        }
+        var makePurple = function() {
+            groundMat.diffuseColor = mats[1]
+        }
+        var makeCyan = function() {
+            groundMat.diffuseColor = mats[2]
+        }
+        var makeWhite = function() {
+            groundMat.diffuseColor = mats[3]
+        }
+        var matGroup = new BABYLON.GUI.RadioGroup("Material Color", "radio")    
+        matGroup.addRadio("Yellow", makeYellow, true)
+        matGroup.addRadio("Purple", makePurple)
+        matGroup.addRadio("Cyan", makeCyan)
+        matGroup.addRadio("White", makeWhite)
+        var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI")
+        var selectBox = new BABYLON.GUI.SelectionPanel("sp", [matGroup])
+        selectBox.width = 0.4
+        selectBox.height = "50%"
+        selectBox.top = "4px"
+        selectBox.left = "4px"
+        selectBox.background = "white"
+        selectBox.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT
+        selectBox.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP
+        advancedTexture.addControl(selectBox)            
+        return scene
+    }
+    const canvasColor = document.getElementById('renderCanvas-6-color')
+    const engineColor = new BABYLON.Engine(canvasColor,true)
+    const sceneColor=createSceneColor(engineColor,canvasColor) 
+    engineColor.runRenderLoop(function(){sceneColor.render()})
+</script>
+
+<p>环境光是在材质周围均匀照射的光，当材质设置环境光颜色，并且场景也设置环境颜色时，材质会产生均匀的颜色分布。我们可以这样理解，场景中的环境颜色<code>scene.ambientColor</code>是材质环境光颜色对应RGB通道的上限。</p>
+<p>以下效果来自<code>Babylon101 Material</code>的环境光部分，可以<a href="https://www.babylonjs-playground.com/#20OAV9#14" target="_blank" rel="noopener">修改代码</a>来观察环境光的影响。</p>
+<div style="display:flex;justify-content:center;margin-top:20px;margin-bottom:20px">
+    <canvas id="renderCanvas-6-ambient" touch-action="none" style="width:400px;height:400px">
+    </canvas>
+</div>
+
+
+<script>
+    var createSceneAmbient = function (engine,canvas) {
+        var scene = new BABYLON.Scene(engine)
+        var camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2,  Math.PI / 4, 5, BABYLON.Vector3.Zero(), scene)
+        camera.attachControl(canvas, false)
+
+        scene.ambientColor = new BABYLON.Color3(1, 1, 1)
+
+        //Light direction is up and left
+        var light = new BABYLON.HemisphericLight("hemiLight", new BABYLON.Vector3(-1, 1, 0), scene)
+        light.diffuse = new BABYLON.Color3(1, 0, 0)
+        light.specular = new BABYLON.Color3(0, 1, 0)
+        light.groundColor = new BABYLON.Color3(0, 1, 0)
+
+        var redMat = new BABYLON.StandardMaterial("redMat", scene)
+        redMat.ambientColor = new BABYLON.Color3(1, 0, 0)
+
+        var greenMat = new BABYLON.StandardMaterial("redMat", scene)
+        greenMat.ambientColor = new BABYLON.Color3(0, 1, 0)
+
+        //No ambient color
+        var sphere0 = BABYLON.MeshBuilder.CreateSphere("sphere0", {}, scene)
+        sphere0.position.x = -1.5    
+
+        //Red Ambient  
+        var sphere1 = BABYLON.MeshBuilder.CreateSphere("sphere1", {}, scene)
+        sphere1.material = redMat
+
+        //Green Ambient
+        var sphere2 = BABYLON.MeshBuilder.CreateSphere("sphere2", {}, scene)
+        sphere2.material = greenMat
+        sphere2.position.x = 1.5                
+
+        return scene
+    }
+    const canvasAmbient = document.getElementById('renderCanvas-6-ambient')
+    const engineAmbient = new BABYLON.Engine(canvasAmbient,true)
+    const sceneAmbient=createSceneAmbient(engineAmbient,canvasAmbient) 
+    engineAmbient.runRenderLoop(function(){sceneAmbient.render()})
+</script>
+
+<p>我们还可以通过设置材质的<code>alpha</code>通道来改变材质透明度，例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myMaterial.alpha = <span class="number">0.5</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://www.babylonjs-playground.com/#20OAV9#16" target="_blank" rel="noopener">官网示例</a>：</p>
+<div style="display:flex;justify-content:center;margin-top:20px;margin-bottom:20px">
+    <canvas id="renderCanvas-6-alpha" touch-action="none" style="width:400px;height:400px">
+    </canvas>
+</div>
+
+
+<script>
+    var createSceneAlpha = function (engine,canvas) {
+    var scene = new BABYLON.Scene(engine)
+    var camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2, 3 * Math.PI / 8, 5, BABYLON.Vector3.Zero(), scene)
+    camera.attachControl(canvas, false)
+
+
+    //Light direction is up and left
+    var light = new BABYLON.HemisphericLight("hemiLight", new BABYLON.Vector3(-1, 1, 0), scene)
+    light.diffuse = new BABYLON.Color3(1, 0, 0)
+    light.specular = new BABYLON.Color3(0, 1, 0)
+    light.groundColor = new BABYLON.Color3(0, 1, 0)
+
+    var redMat = new BABYLON.StandardMaterial("redMat", scene)
+    redMat.diffuseColor = new BABYLON.Color3(1, 0, 0)
+
+    var greenMat = new BABYLON.StandardMaterial("greenMat", scene)
+    greenMat.diffuseColor = new BABYLON.Color3(0, 1, 0)
+    greenMat.alpha = 0.5    
+
+    //Red  
+    var sphere1 = BABYLON.MeshBuilder.CreateSphere("sphere1", {}, scene)
+    sphere1.material = redMat
+    sphere1.position.z = 1.5
+
+    //Green Transparent
+    var sphere2 = BABYLON.MeshBuilder.CreateSphere("sphere2", {}, scene)
+    sphere2.material = greenMat                
+
+    return scene
+
+}
+    const canvasAlpha = document.getElementById('renderCanvas-6-alpha')
+    const engineAlpha = new BABYLON.Engine(canvasAlpha,true)
+    const sceneAlpha=createSceneAlpha(engineAlpha,canvasAlpha) 
+    engineAlpha.runRenderLoop(function(){sceneAlpha.render()})
+</script>
+
+<h2 id="纹理-（Texture）"><a href="#纹理-（Texture）" class="headerlink" title="纹理 （Texture）"></a>纹理 （Texture）</h2><p>使用以下代码创建一个标准材质<code>StandardMaterial</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myMaterial = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"myMaterial"</span>, scene) <span class="comment">// 与上面颜色部分相同</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以设置<code>myMaterial</code>的属性，对于纹理有以下属性</p>
+<ul>
+<li>diffuseTexture</li>
+<li>specularTexture</li>
+<li>emissiveTexture</li>
+<li>ambientTexture</li>
+</ul>
+<p>使用方法如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myMaterial = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"myMaterial"</span>, scene)</span><br><span class="line"></span><br><span class="line">myMaterial.diffuseTexture = <span class="keyword">new</span> BABYLON.Texture(<span class="string">"PATH TO IMAGE"</span>, scene)</span><br><span class="line">myMaterial.specularTexture = <span class="keyword">new</span> BABYLON.Texture(<span class="string">"PATH TO IMAGE"</span>, scene)</span><br><span class="line">myMaterial.emissiveTexture = <span class="keyword">new</span> BABYLON.Texture(<span class="string">"PATH TO IMAGE"</span>, scene)</span><br><span class="line">myMaterial.ambientTexture = <span class="keyword">new</span> BABYLON.Texture(<span class="string">"PATH TO IMAGE"</span>, scene)</span><br><span class="line"></span><br><span class="line">mesh.material = myMaterial</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>&quot;PATH TO IMAGE&quot;</code>是纹理的路径。</p>
+<div style="background-color:#F8F8F8;border-left:red 5px solid;padding:30px;margin-bottom:20px">你可能注意到了，这个博客的横幅<code>banner</code>部分就是在一个平面<code>plane</code>上贴了一张约会大作战的图片纹理，你可以拖拽查看一下。</div>
+
+<p>我们将这张图片贴到一个盒子<code>box</code>上，使用如下代码实现：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> createSceneTexture = <span class="function"><span class="keyword">function</span> (<span class="params">engine,canvas</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> BABYLON.Scene(engine)</span><br><span class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> BABYLON.ArcRotateCamera(<span class="string">"Camera"</span>, -<span class="built_in">Math</span>.PI / <span class="number">2</span>,  <span class="built_in">Math</span>.PI / <span class="number">4</span>, <span class="number">4</span>, BABYLON.Vector3.Zero(), scene)</span><br><span class="line">    camera.attachControl(canvas, <span class="literal">false</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 打一个默认平行光（白色）</span></span><br><span class="line">    <span class="keyword">var</span> light = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">"hemiLight"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">-1</span>, <span class="number">1</span>, <span class="number">0</span>), scene)</span><br><span class="line">    <span class="comment">// 创建材质</span></span><br><span class="line">    <span class="keyword">var</span> material = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"material"</span>,scene)</span><br><span class="line">    <span class="comment">//创建并选择纹理</span></span><br><span class="line">    material.diffuseTexture = <span class="keyword">new</span> BABYLON.Texture(<span class="string">"https://zzqizqute.github.io/css/images/banner.jpg"</span>,scene)</span><br><span class="line">    <span class="comment">//创建盒子</span></span><br><span class="line">    <span class="keyword">var</span> box = BABYLON.MeshBuilder.CreateBox(<span class="string">"sphere"</span>,&#123;<span class="attr">size</span>:<span class="number">2</span>&#125;,scene)</span><br><span class="line">    <span class="comment">//将材质应用于盒子</span></span><br><span class="line">    box.material=material</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> scene</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> canvasTexture = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-6-texture'</span>)</span><br><span class="line"><span class="keyword">const</span> engineTexture = <span class="keyword">new</span> BABYLON.Engine(canvasTexture,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> sceneTexture = createSceneTexture(engineTexture,canvasTexture) </span><br><span class="line">engineTexture.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;sceneTexture.render()&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<div style="display:flex;justify-content:center;margin-top:20px;margin-bottom:20px">
+    <canvas id="renderCanvas-6-texture" touch-action="none" style="width:400px;height:400px">
+    </canvas>
+</div>
+
+<script>
+    var createSceneTexture = function (engine,canvas) {
+        var scene = new BABYLON.Scene(engine)
+        var camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2,  Math.PI / 4, 4, BABYLON.Vector3.Zero(), scene)
+        camera.attachControl(canvas, false)
+
+        // 打一个默认平行光（白色）
+        var light = new BABYLON.HemisphericLight("hemiLight", new BABYLON.Vector3(-1, 1, 0), scene)
+        // 创建材质
+        var material = new BABYLON.StandardMaterial("material",scene)
+        //创建并选择纹理
+        material.diffuseTexture = new BABYLON.Texture("https://zzqizqute.github.io/css/images/banner.jpg",scene)
+        //创建盒子
+        var box = BABYLON.MeshBuilder.CreateBox("sphere",{size:2},scene)
+        //将材质应用于盒子
+        box.material=material
+
+        return scene
+    }
+    const canvasTexture = document.getElementById('renderCanvas-6-texture')
+    const engineTexture = new BABYLON.Engine(canvasTexture,true)
+    const sceneTexture = createSceneTexture(engineTexture,canvasTexture) 
+    engineTexture.runRenderLoop(function(){sceneTexture.render()})
+</script>
+
+<p>同样的，我们可以设置材质的<code>alpha</code>通道使其透明，但是对于纹理，需要设置纹理<code>Texture</code>的<code>hasAlpha</code>属性为<code>true</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">myMaterial.alpha = <span class="number">0.5</span></span><br><span class="line">myMaterial.diffuseTexture.hasAlpha = <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<div style="background-color:#F8F8F8;border-left:red 5px solid;padding:30px;margin-top:20px;margin-bottom:20px">如果材质是<code>png</code>格式的图片，并且包含<code>alpha</code>通道的时候，将会根据<code>alpha</code>通道的值进行透明处理。</div>
+
+<h2 id="背景剔除-（Back-Face-Culling）"><a href="#背景剔除-（Back-Face-Culling）" class="headerlink" title="背景剔除 （Back Face Culling）"></a>背景剔除 （Back Face Culling）</h2><p>默认情况下3d渲染时为提高性能，不渲染背面。对于透明材质，默认情况下其<code>backFaceCulling</code>属性为<code>true</code>，如果在前面观察，将看不到透过透明区域的背面形状。此时将<code>backFaceCulling</code>设置为<code>false</code>，就可以看到了。下面是Babylon提供的代码，我们对其进行修改，使其一直旋转，并定时切换<code>backFaceCulling</code>属性，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">var</span> createSceneBackFaceCulling = <span class="function"><span class="keyword">function</span> (<span class="params">engine,canvas</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> BABYLON.Scene(engine)</span><br><span class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> BABYLON.ArcRotateCamera(<span class="string">"Camera"</span>, <span class="number">13</span> * <span class="built_in">Math</span>.PI / <span class="number">8</span>, <span class="built_in">Math</span>.PI / <span class="number">4</span>, <span class="number">3</span>, BABYLON.Vector3.Zero(), scene)</span><br><span class="line">    camera.attachControl(canvas, <span class="literal">false</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> light = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">"light1"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>), scene)</span><br><span class="line">    light.intensity = <span class="number">0.7</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> pl = <span class="keyword">new</span> BABYLON.PointLight(<span class="string">"pl"</span>, BABYLON.Vector3.Zero(), scene)</span><br><span class="line">    pl.diffuse = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">    pl.specular = <span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">    pl.intensity = <span class="number">0.8</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> mat = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"dog"</span>, scene)</span><br><span class="line">    mat.diffuseTexture = <span class="keyword">new</span> BABYLON.Texture(<span class="string">"https://upload.wikimedia.org/wikipedia/commons/8/87/Alaskan_Malamute%2BBlank.png"</span>, scene)</span><br><span class="line">    mat.diffuseTexture.hasAlpha = <span class="literal">true</span></span><br><span class="line">    mat.backFaceCulling = <span class="literal">true</span></span><br><span class="line">    <span class="keyword">var</span> box = BABYLON.MeshBuilder.CreateBox(<span class="string">"box"</span>, &#123;&#125;, scene)</span><br><span class="line">    box.material = mat</span><br><span class="line">    <span class="keyword">var</span> backfacecullingHint=<span class="built_in">document</span>.querySelector(<span class="string">'#backfaceculling-hint'</span>)</span><br><span class="line">    backfacecullingHint.innerText=<span class="string">"背景剔除"</span></span><br><span class="line">    <span class="keyword">const</span> anime = <span class="function"><span class="params">()</span>=&gt;</span> &#123;</span><br><span class="line">        box.rotation.y+=<span class="number">0.04</span></span><br><span class="line">        <span class="keyword">if</span>(box.rotation.y&gt;=<span class="built_in">Math</span>.PI*<span class="number">2</span>)&#123;</span><br><span class="line">            box.rotation.y=<span class="number">0</span></span><br><span class="line">            mat.backFaceCulling=!mat.backFaceCulling</span><br><span class="line">            <span class="keyword">if</span>(mat.backFaceCulling)&#123;</span><br><span class="line">                backfacecullingHint.style.textDecoration=<span class="string">""</span></span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                backfacecullingHint.style.textDecoration=<span class="string">"line-through"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        requestAnimationFrame(anime)</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    anime()</span><br><span class="line">    <span class="keyword">return</span> scene</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> canvasBackFaceCulling = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-6-backfaceculling'</span>)</span><br><span class="line"><span class="keyword">const</span> engineBackFaceCulling = <span class="keyword">new</span> BABYLON.Engine(canvasBackFaceCulling,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> sceneBackFaceCulling = createSceneBackFaceCulling(engineBackFaceCulling,canvasBackFaceCulling) </span><br><span class="line">engineBackFaceCulling.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;sceneBackFaceCulling.render()&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<div style="display:flex;flex-direction:column;align-items:center;margin-top:20px;margin-bottom:20px">
+    <canvas id="renderCanvas-6-backfaceculling" touch-action="none" style="width:400px;height:400px">
+    </canvas>
+    <div id="backfaceculling-hint" style="margin-top:20px;font-size:32px"></div>
+</div>
+
+<script>
+    var createSceneBackFaceCulling = function (engine,canvas) {
+        var scene = new BABYLON.Scene(engine)
+        var camera = new BABYLON.ArcRotateCamera("Camera", 13 * Math.PI / 8, Math.PI / 4, 3, BABYLON.Vector3.Zero(), scene)
+        camera.attachControl(canvas, false)
+
+        var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene)
+        light.intensity = 0.7
+
+        var pl = new BABYLON.PointLight("pl", BABYLON.Vector3.Zero(), scene)
+        pl.diffuse = new BABYLON.Color3(1, 1, 1)
+        pl.specular = new BABYLON.Color3(1, 1, 1)
+        pl.intensity = 0.8
+
+        var mat = new BABYLON.StandardMaterial("dog", scene)
+        mat.diffuseTexture = new BABYLON.Texture("https://upload.wikimedia.org/wikipedia/commons/8/87/Alaskan_Malamute%2BBlank.png", scene)
+        mat.diffuseTexture.hasAlpha = true
+        mat.backFaceCulling = true
+        var box = BABYLON.MeshBuilder.CreateBox("box", {}, scene)
+        box.material = mat
+        var backfacecullingHint=document.querySelector('#backfaceculling-hint')
+        backfacecullingHint.innerText="背景剔除"
+        const anime = ()=> {
+            box.rotation.y+=0.04
+            if(box.rotation.y>=Math.PI*2){
+                box.rotation.y=0
+                mat.backFaceCulling=!mat.backFaceCulling
+                if(mat.backFaceCulling){
+                    backfacecullingHint.style.textDecoration=""
+                }else{
+                    backfacecullingHint.style.textDecoration="line-through"
+                }
+            }
+            requestAnimationFrame(anime)
+        }
+        anime()
+        return scene
+    }
+    const canvasBackFaceCulling = document.getElementById('renderCanvas-6-backfaceculling')
+    const engineBackFaceCulling = new BABYLON.Engine(canvasBackFaceCulling,true)
+    const sceneBackFaceCulling = createSceneBackFaceCulling(engineBackFaceCulling,canvasBackFaceCulling) 
+    engineBackFaceCulling.runRenderLoop(function(){sceneBackFaceCulling.render()})
+</script>
+
+<h2 id="网格图"><a href="#网格图" class="headerlink" title="网格图"></a>网格图</h2><p>可以显示<code>mesh</code>的网格骨架。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myMaterial.wireframe = <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p>示例代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> createSceneWireFrame = <span class="function"><span class="keyword">function</span> (<span class="params">engine,canvas</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> scene = <span class="keyword">new</span> BABYLON.Scene(engine)</span><br><span class="line">    <span class="keyword">var</span> camera = <span class="keyword">new</span> BABYLON.ArcRotateCamera(<span class="string">"Camera"</span>, <span class="number">13</span> * <span class="built_in">Math</span>.PI / <span class="number">8</span>, <span class="built_in">Math</span>.PI / <span class="number">4</span>, <span class="number">2</span>, BABYLON.Vector3.Zero(), scene)</span><br><span class="line">    camera.attachControl(canvas, <span class="literal">false</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> light = <span class="keyword">new</span> BABYLON.HemisphericLight(<span class="string">"light1"</span>, <span class="keyword">new</span> BABYLON.Vector3(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>), scene)</span><br><span class="line">    light.intensity = <span class="number">0.7</span></span><br><span class="line">    <span class="keyword">var</span> sphere = BABYLON.MeshBuilder.CreateSphere(<span class="string">"sphere"</span>,&#123;&#125;,scene)</span><br><span class="line">    <span class="keyword">var</span> material = <span class="keyword">new</span> BABYLON.StandardMaterial(<span class="string">"material"</span>,scene)</span><br><span class="line">    material.diffuseColor=<span class="keyword">new</span> BABYLON.Color3(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">    material.wireframe=<span class="literal">true</span></span><br><span class="line">    sphere.material=material</span><br><span class="line">    <span class="keyword">return</span> scene</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> canvasWireFrame = <span class="built_in">document</span>.getElementById(<span class="string">'renderCanvas-6-wireframe'</span>)</span><br><span class="line"><span class="keyword">const</span> engineWireFrame = <span class="keyword">new</span> BABYLON.Engine(canvasWireFrame,<span class="literal">true</span>)</span><br><span class="line"><span class="keyword">const</span> sceneWireFrame = createSceneWireFrame(engineWireFrame,canvasWireFrame) </span><br><span class="line">engineWireFrame.runRenderLoop(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;sceneWireFrame.render()&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<div style="display:flex;flex-direction:column;align-items:center;margin-top:20px;margin-bottom:20px">
+    <canvas id="renderCanvas-6-wireframe" touch-action="none" style="width:400px;height:400px">
+    </canvas>
+</div>
+
+<script>
+    var createSceneWireFrame = function (engine,canvas) {
+        var scene = new BABYLON.Scene(engine)
+        var camera = new BABYLON.ArcRotateCamera("Camera", 13 * Math.PI / 8, Math.PI / 4, 2, BABYLON.Vector3.Zero(), scene)
+        camera.attachControl(canvas, false)
+
+        var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene)
+        light.intensity = 0.7
+        var sphere = BABYLON.MeshBuilder.CreateSphere("sphere",{},scene)
+        var material = new BABYLON.StandardMaterial("material",scene)
+        material.diffuseColor=new BABYLON.Color3(1,1,1)
+        material.wireframe=true
+        sphere.material=material
+        return scene
+    }
+    const canvasWireFrame = document.getElementById('renderCanvas-6-wireframe')
+    const engineWireFrame = new BABYLON.Engine(canvasWireFrame,true)
+    const sceneWireFrame = createSceneWireFrame(engineWireFrame,canvasWireFrame) 
+    engineWireFrame.runRenderLoop(function(){sceneWireFrame.render()})
+</script>
+
 
       
     </div>
     <!-- <footer class="article-footer">
-      <a data-url="https://github.com/ZzqiZQute/2019/06/03/Blender-1/" data-id="ckxywfepg0008l4u7rvivmqsi" class="article-share-link">Share</a>
+      <a data-url="https://github.com/ZzqiZQute/2019/06/04/Babylon-js-6-材质/" data-id="ckxyws0040008ewu73d284o9k" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Blender/">Blender</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BabylonJS/">BabylonJS</a></li></ul>
 
     </footer> -->
   </div>
@@ -126,7 +496,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/8/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/10/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/8/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/10/">下一页 &raquo;</a>
   </nav>
 
 </section>
@@ -150,7 +520,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">一月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li></ul>
     </div>
   </div>
 
@@ -161,6 +531,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2022/01/04/新的一年，继续努力/">新的一年，继续努力</a>
+          </li>
         
           <li>
             <a href="/2019/06/19/关于使用Vue-js的通知/">关于使用Vue.js的通知（误）</a>
@@ -176,10 +550,6 @@
         
           <li>
             <a href="/2019/06/13/Babylon-js-8-光照/">Babylon.js-8 光照</a>
-          </li>
-        
-          <li>
-            <a href="/2019/06/12/配置Babel以便使用es6编写Node代码/">配置Babel以便使用es6编写Node代码</a>
           </li>
         
       </ul>
