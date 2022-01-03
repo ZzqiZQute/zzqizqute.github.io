@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>三边测量（Trilateration）定位方法 | 我带你们打</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="let isMathjaxConfig = false; // 防止重复调用Config，造成性能损耗  const initMathjaxConfig = () =&amp;gt; {   if (!window.MathJax) {     return;   }   window.MathJax.Hub.Config({     showProcessingMessages: false, //关">
+<meta name="keywords" content="Algorithms">
+<meta property="og:type" content="article">
+<meta property="og:title" content="三边测量（Trilateration）定位方法">
+<meta property="og:url" content="https://github.com/ZzqiZQute/2019/06/18/三边测量（Trilateration）定位方法/index.html">
+<meta property="og:site_name" content="我带你们打">
+<meta property="og:description" content="let isMathjaxConfig = false; // 防止重复调用Config，造成性能损耗  const initMathjaxConfig = () =&amp;gt; {   if (!window.MathJax) {     return;   }   window.MathJax.Hub.Config({     showProcessingMessages: false, //关">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2022-01-03T09:56:48.143Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="三边测量（Trilateration）定位方法">
+<meta name="twitter:description" content="let isMathjaxConfig = false; // 防止重复调用Config，造成性能损耗  const initMathjaxConfig = () =&amp;gt; {   if (!window.MathJax) {     return;   }   window.MathJax.Hub.Config({     showProcessingMessages: false, //关">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <link href="https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script>
+    NProgress.start()
+  </script>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+   <canvas id="logo3d-canvas" touch-action="none">
+  </canvas>
+  
+  <div id="header-outer" class="outer">
+  
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我带你们打</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">a.k.a. WDNMD</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!--  -->
+        
+          <a id="nav-github-link" class="nav-icon" href="https://github.com/ZzqiZQute" title="Github"></a>
+        
+        <!-- <a id="nav-search-btn" class="nav-icon" title="搜索"></a> -->
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/ZzqiZQute"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-三边测量（Trilateration）定位方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/18/三边测量（Trilateration）定位方法/" class="article-date">
+  <time datetime="2019-06-18T07:19:55.000Z" itemprop="datePublished">2019-06-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      三边测量（Trilateration）定位方法
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+
+
+let isMathjaxConfig = false; // 防止重复调用Config，造成性能损耗
+
+const initMathjaxConfig = () => {
+  if (!window.MathJax) {
+    return;
+  }
+  window.MathJax.Hub.Config({
+    showProcessingMessages: false, //关闭js加载过程信息
+    messageStyle: "none", //不显示信息
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+      displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+      skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+    },
+    "HTML-CSS": {
+      availableFonts: ["STIX", "TeX"], //可选字体
+      showMathMenu: false //关闭右击菜单显示
+    }
+  });
+  isMathjaxConfig = true; // 
+};
+if (isMathjaxConfig === false) { // 如果：没有配置MathJax
+  initMathjaxConfig();
+}
+
+</script>
+
+<p>参考链接：<a href="https://blog.csdn.net/chengde6896383/article/details/76474358" target="_blank" rel="noopener">https://blog.csdn.net/chengde6896383/article/details/76474358</a></p>
+<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><p>已知条件：</p>
+<ul>
+<li>三个锚节点（Anchor，A）的坐标<code>(x<sub>1</sub>,y<sub>1</sub>,z<sub>1</sub>)</code>,<code>(x<sub>2</sub>,y<sub>2</sub>,z<sub>2</sub>)</code>,<code>(x<sub>3</sub>,y<sub>3</sub>,z<sub>3</sub>)</code></li>
+<li>标签节点(Tag，T)到达三个A节点的距离分别为<code>r<sub>1</sub></code>,<code>r<sub>2</sub></code>,<code>r<sub>3</sub></code></li>
+</ul>
+<p>求解标签节点的坐标<code>(x,y,z)</code>。</p>
+<p>根据勾股定理，可以计算得到T节点的位置：</p>
+<p>$$ (x_{1}-x)^2+(y_{1}-y)^2+(z_{1}-z)^2=r_{1}^2 $$<br>$$ (x_{2}-x)^2+(y_{2}-y)^2+(z_{2}-z)^2=r_{2}^2 $$<br>$$ (x_{3}-x)^2+(y_{3}-y)^2+(z_{3}-z)^2=r_{3}^2 $$</p>
+<p>首先设：A<sub>1</sub>的坐标为<code>(0,0,0)</code>，A<sub>2</sub>的y坐标与A<sub>1</sub>相同，坐标为<code>(d,0,0)</code>，A<sub>3</sub>的坐标为<code>(i,j,0)</code>，三个球形的半径（到T节点的距离）分别为<code>r1</code>,<code>r2</code>,<code>r3</code>，<code>z</code>为T节点到A节点构成的平面的距离，则有：</p>
+<p>$$ x^2+y^2+z^2=r_{1}^2\quad① $$<br>$$ (x-d)^2+y^2+z^2=r_{2}^2\quad② $$<br>$$ (x-i)^2+(y-j)^2+z^2=r_{3}^2\quad③ $$</p>
+<p>由①-②求得 <span style="color:red"><b>x</b></span> ：</p>
+<p>$$ x = (r_{1}^2-r_{2}^2+d^2)/(2*d)\quad④ $$</p>
+<p>由②-③并将④带入求得 <span style="color:green"><b>y</b></span> ：</p>
+<p>$$ y = (r_{1}^2-r_{3}^2-x^2+(x-i)^2+j^2)/(2*j)\quad⑤ $$</p>
+<p>然后由①④⑤求得 <span style="color:blue"><b>z</b></span> ：</p>
+<p>$$ z = \sqrt{r_{1}^2-x^2-y^2}\quad⑥ $$</p>
+<p>完毕。</p>
+<div style="background-color:#F8F8F8;border-left:red 5px solid;padding:30px;margin-top:20px;margin-bottom:20px">注意：这种方法需要三个A节点在同一水平面上，并且无法区分z是在水平面上面或者下面。</div>
+      
+    </div>
+    <!-- <footer class="article-footer">
+      <a data-url="https://github.com/ZzqiZQute/2019/06/18/三边测量（Trilateration）定位方法/" data-id="ckxyv71aa000ro8u7jxblhr8u" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Algorithms/">Algorithms</a></li></ul>
+
+    </footer> -->
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/06/19/关于使用Vue-js的通知/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          关于使用Vue.js的通知（误）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/06/15/Babylon-js-9-动画/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Babylon.js-9 动画</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithms/">Algorithms</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BabylonJS/">BabylonJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Blender/">Blender</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Webpack/">Webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel/">babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chore/">chore</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/06/19/关于使用Vue-js的通知/">关于使用Vue.js的通知（误）</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/18/三边测量（Trilateration）定位方法/">三边测量（Trilateration）定位方法</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/15/Babylon-js-9-动画/">Babylon.js-9 动画</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/13/Babylon-js-8-光照/">Babylon.js-8 光照</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/12/配置Babel以便使用es6编写Node代码/">配置Babel以便使用es6编写Node代码</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 ZzqiZQute<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+     <br>
+     <br>
+    <div>我猜你已经发现了页面的彩蛋，对吗？</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    
+<script src="https://cdn.bootcss.com/babylonjs/4.1.0-alpha.1/babylon.js"></script>
+<script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script> <!-- babylon.js加载器 (OBJ, STL, glTF)-->
+<script src="https://code.jquery.com/pep/0.4.3/pep.js"></script> <!-- Pointer Event Polyfill 便携设备触碰事件处理 -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

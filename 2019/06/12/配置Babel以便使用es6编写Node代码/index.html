@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>配置Babel以便使用es6编写Node代码 | 我带你们打</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="使用yarn新建一个Node项目  1yarn init -y   安装babel-cli,babel-preset-dev为开发依赖项(devDependencies)  1yarn add -D babel-cli babel-preset-dev   配置.babelrc  12345678&amp;#123;    &quot;presets&quot;:[        &quot;env&quot;    ],    &quot;plugi">
+<meta name="keywords" content="babel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="配置Babel以便使用es6编写Node代码">
+<meta property="og:url" content="https://github.com/ZzqiZQute/2019/06/12/配置Babel以便使用es6编写Node代码/index.html">
+<meta property="og:site_name" content="我带你们打">
+<meta property="og:description" content="使用yarn新建一个Node项目  1yarn init -y   安装babel-cli,babel-preset-dev为开发依赖项(devDependencies)  1yarn add -D babel-cli babel-preset-dev   配置.babelrc  12345678&amp;#123;    &quot;presets&quot;:[        &quot;env&quot;    ],    &quot;plugi">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2022-01-03T09:56:48.158Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="配置Babel以便使用es6编写Node代码">
+<meta name="twitter:description" content="使用yarn新建一个Node项目  1yarn init -y   安装babel-cli,babel-preset-dev为开发依赖项(devDependencies)  1yarn add -D babel-cli babel-preset-dev   配置.babelrc  12345678&amp;#123;    &quot;presets&quot;:[        &quot;env&quot;    ],    &quot;plugi">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <link href="https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+  <script>
+    NProgress.start()
+  </script>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+   <canvas id="logo3d-canvas" touch-action="none">
+  </canvas>
+  
+  <div id="header-outer" class="outer">
+  
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我带你们打</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">a.k.a. WDNMD</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <!--  -->
+        
+          <a id="nav-github-link" class="nav-icon" href="https://github.com/ZzqiZQute" title="Github"></a>
+        
+        <!-- <a id="nav-search-btn" class="nav-icon" title="搜索"></a> -->
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/ZzqiZQute"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-配置Babel以便使用es6编写Node代码" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/12/配置Babel以便使用es6编写Node代码/" class="article-date">
+  <time datetime="2019-06-12T15:49:30.000Z" itemprop="datePublished">2019-06-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      配置Babel以便使用es6编写Node代码
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li>使用<code>yarn</code>新建一个Node项目</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn init -y</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>安装<code>babel-cli</code>,<code>babel-preset-dev</code>为开发依赖项(devDependencies)</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D babel-cli babel-preset-dev</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>配置<a href="https://babeljs.io/docs/en/config-files#file-relative-configuration" target="_blank" rel="noopener"><code>.babelrc</code></a></li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"presets"</span>:[</span><br><span class="line">        <span class="string">"env"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">"plugins"</span>:[</span><br><span class="line"></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>使用<code>babel-node</code>运行代码</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">babel-node index.js</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>使用<code>babel-cli</code>编译代码</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">babel src.js -o dst.js</span><br><span class="line">babel src -d lib</span><br></pre></td></tr></table></figure>
+
+<p>如果使用<code>nodemon</code>可以在代码变更的时候重新运行</p>
+<ol>
+<li>安装<code>nodemon</code>到<code>devDependencies</code>中</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D nodemon</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>添加如下代码到<code>package.json</code>(npmscript)</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//...</span><br><span class="line">"scripts":&#123;</span><br><span class="line">    //...</span><br><span class="line">    "start":"nodemon --exec 'babel-node index.js'"</span><br><span class="line">&#125;,</span><br><span class="line">//...</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <!-- <footer class="article-footer">
+      <a data-url="https://github.com/ZzqiZQute/2019/06/12/配置Babel以便使用es6编写Node代码/" data-id="ckxyv71ab000to8u712uln1e5" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/babel/">babel</a></li></ul>
+
+    </footer> -->
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/06/13/Babylon-js-8-光照/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Babylon.js-8 光照
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/06/08/Babylon-js-7-照相机/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Babylon.js-7 照相机</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithms/">Algorithms</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BabylonJS/">BabylonJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Blender/">Blender</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Webpack/">Webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel/">babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chore/">chore</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/06/19/关于使用Vue-js的通知/">关于使用Vue.js的通知（误）</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/18/三边测量（Trilateration）定位方法/">三边测量（Trilateration）定位方法</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/15/Babylon-js-9-动画/">Babylon.js-9 动画</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/13/Babylon-js-8-光照/">Babylon.js-8 光照</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/12/配置Babel以便使用es6编写Node代码/">配置Babel以便使用es6编写Node代码</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 ZzqiZQute<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+     <br>
+     <br>
+    <div>我猜你已经发现了页面的彩蛋，对吗？</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    
+<script src="https://cdn.bootcss.com/babylonjs/4.1.0-alpha.1/babylon.js"></script>
+<script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script> <!-- babylon.js加载器 (OBJ, STL, glTF)-->
+<script src="https://code.jquery.com/pep/0.4.3/pep.js"></script> <!-- Pointer Event Polyfill 便携设备触碰事件处理 -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
