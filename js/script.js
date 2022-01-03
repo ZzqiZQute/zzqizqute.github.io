@@ -154,7 +154,7 @@
   var light2Banner=new BABYLON.HemisphericLight("light2Banner",new BABYLON.Vector3(0,2,1),sceneBanner)
   var planeBanner=BABYLON.MeshBuilder.CreatePlane("planeBanner",{width:160,height:48,sideOrientation:BABYLON.Mesh.DOUBLESIDE},sceneBanner)
   var materialBanner=new BABYLON.StandardMaterial("materialBanner",sceneBanner)
-  var textureName = "https://zzqizqute.github.io/css/images/banner" + (Math.random() > 0.5 ? "2" : "") + ".jpg";
+  var textureName = "https://zzqizqute.github.io/css/images/banner" + (Math.ceil(Math.random() * 3)) + ".jpg";
   materialBanner.diffuseTexture=new BABYLON.Texture(textureName,sceneBanner)
   planeBanner.material=materialBanner
   engineBanner.runRenderLoop(function(){sceneBanner.render()})
